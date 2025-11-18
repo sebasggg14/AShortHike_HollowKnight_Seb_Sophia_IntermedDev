@@ -101,6 +101,16 @@ public class CameraMovement : MonoBehaviour
             targetPos.y = Mathf.Clamp (targetPos.y, b.min.y, b.max.y);
         }
 
+        // check if its working
+        if (currentRoom == null)
+        {
+            Debug.Log("No camera room set");
+        }
+        else
+        {
+            Debug.Log("Clamping to room " + currentRoom.name);
+        }
+
         // make camera lerp to target
         targetPos.z = -16f;
         transform.position = Vector3.SmoothDamp(transform.position, targetPos, ref velocity, smoothValue);
