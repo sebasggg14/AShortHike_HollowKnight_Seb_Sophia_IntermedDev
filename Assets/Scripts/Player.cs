@@ -36,13 +36,25 @@ public class Player : MonoBehaviour
     {
         //movement:
         Vector3 currentPos = transform.position;
+        currentPos.z = 0f;
+        float yRotation = transform.localEulerAngles.y;
+        if (yRotation > 180f) yRotation -= 360f;
+
         if (Input.GetKey(KeyCode.A) && left)
         {
             currentPos.x -= speed * Time.deltaTime;
+            if (yRotation <= -44)
+            {
+                transform.Rotate(0, 270 * Time.deltaTime, 0);
+            }
         }
         if (Input.GetKey(KeyCode.D) && right)
         {
             currentPos.x += speed * Time.deltaTime;
+            if (yRotation >= -136.7f)
+            {
+                transform.Rotate(0, -270 * Time.deltaTime, 0);
+            }
         }
         transform.position = currentPos;
 
