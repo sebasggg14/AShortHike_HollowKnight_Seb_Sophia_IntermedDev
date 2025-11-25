@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 
 public class Player : MonoBehaviour
 {
@@ -23,6 +24,17 @@ public class Player : MonoBehaviour
     bool down = true;
     bool isGrounded = true;
 
+    //enum for attack states 
+    enum PlayerStates
+    {
+        attacking,
+        idling
+    }
+
+    public static bool canAttack = true;
+
+    PlayerStates states = PlayerStates.idling;
+
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -34,6 +46,7 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        Debug.Log(canAttack);
         //movement:
         Vector3 currentPos = transform.position;
         currentPos.z = 0f;
@@ -57,6 +70,28 @@ public class Player : MonoBehaviour
             }
         }
         transform.position = currentPos;
+
+        if (Input.GetMouseButtonDown(0))
+        {
+            canAttack = false;
+            states = PlayerStates.attacking;
+        }
+        else
+        {
+            states = PlayerStates.idling;
+        }
+
+        if (states == PlayerStates.attacking)
+        {
+            PlayerAttack();
+        }
+
+        if (states == PlayerStates.idling)
+        {
+            //canAttack = true;
+        }
+
+        
 
         //jump
         if (Input.GetKeyDown(KeyCode.Space))
@@ -83,6 +118,19 @@ public class Player : MonoBehaviour
         }
     }
 
+    IEnumerator AttackDuration()
+    {
+        Debug.Log("attack started");
+        yield return new WaitForSeconds(1f);
+        Debug.Log("attack finished");
+        canAttack = true;
+    }
+
+    //IEnumerator AttackCooldown()
+    //{
+        
+    //}
+
     void AddFeathers()
     {
         if (feathers >= maxFeathers) return; //does not go past max
@@ -94,7 +142,14 @@ public class Player : MonoBehaviour
             feathers++;
             regenTimer = 0f; // restart timer for next feather
         }
-        Debug.Log("Num Feathers Available: " + feathers); 
+        //Debug.Log("Num Feathers Available: " + feathers); 
+    }
+
+    void PlayerAttack()
+    {
+        Debug.Log("attacked");
+        StartCoroutine(AttackDuration());
+        states = PlayerStates.idling;
     }
     
     void OnCollisionEnter(Collision collision)
