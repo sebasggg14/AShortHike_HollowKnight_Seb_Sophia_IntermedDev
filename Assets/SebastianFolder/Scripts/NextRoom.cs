@@ -8,13 +8,20 @@ public class NextRoom : MonoBehaviour
     [SerializeField]
     PlayerEDITS player;
 
+    [SerializeField]
+    GameObject transitionObject;
+
+    Animator animator;
+    TransitionCode script;
+
     bool canTransition = false;
-    string nextScene = ""; 
+    public string nextScene = ""; 
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         canTransition = false;
+        animator = transitionObject.GetComponent<Animator>();
     }
 
     // Update is called once per frame
@@ -22,8 +29,7 @@ public class NextRoom : MonoBehaviour
     {
         if (canTransition == true)
         {
-            LoadSceneByName(nextScene);
-            player.isActive = true;
+            animator.SetTrigger("FadeIn");
         }
     }
 
@@ -35,11 +41,6 @@ public class NextRoom : MonoBehaviour
             nextScene = collider.name;
             StartCoroutine(TransitionDuration());
         }
-    }
-
-    void LoadSceneByName (string name)
-    {
-        SceneManager.LoadScene(name);
     }
 
     IEnumerator TransitionDuration()
