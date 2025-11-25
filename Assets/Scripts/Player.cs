@@ -3,6 +3,9 @@ using System.Collections;
 
 public class Player : MonoBehaviour
 {
+    // for room transition
+    public bool isActive = true;
+
     // for camera offset 
     public int lastInputHorizontal = 0; // -1 means left, 1 means right
 
@@ -44,19 +47,21 @@ public class Player : MonoBehaviour
     {
         feathers = maxFeathers;
         rb = GetComponent<Rigidbody>();
+        isActive = true;
     }
 
     // Update is called once per frame
     void Update()
     {
-        Debug.Log(canAttack);
+        //Debug.Log(canAttack);
+        //Debug.Log("is active? " + isActive);
         //movement:
         Vector3 currentPos = transform.position;
         currentPos.z = 0f;
         float yRotation = transform.localEulerAngles.y;
         if (yRotation > 180f) yRotation -= 360f;
 
-        if (Input.GetKey(KeyCode.A) && left)
+        if (Input.GetKey(KeyCode.A) && left && isActive)
         {
             currentPos.x -= speed * Time.deltaTime;
             lastInputHorizontal = -1; // left 
@@ -65,7 +70,7 @@ public class Player : MonoBehaviour
                 transform.Rotate(0, 270 * Time.deltaTime, 0);
             }
         }
-        if (Input.GetKey(KeyCode.D) && right)
+        if (Input.GetKey(KeyCode.D) && right && isActive)
         {
             currentPos.x += speed * Time.deltaTime;
             lastInputHorizontal = 1; // right
@@ -74,9 +79,23 @@ public class Player : MonoBehaviour
                 transform.Rotate(0, -270 * Time.deltaTime, 0);
             }
         }
+
+        // for smooth transition between scenes 
+        if (!isActive)
+        {
+            if (lastInputHorizontal == -1)
+            {
+                currentPos.x -= speed * Time.deltaTime;
+            }
+
+            if (lastInputHorizontal == 1)
+            {
+                currentPos.x += speed * Time.deltaTime;
+            }
+        }
         transform.position = currentPos;
 
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0) && isActive)
         {
             canAttack = false;
             states = PlayerStates.attacking;
@@ -99,7 +118,7 @@ public class Player : MonoBehaviour
         
 
         //jump
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space) && isActive)
         {
             if (isGrounded)
             {
@@ -125,9 +144,9 @@ public class Player : MonoBehaviour
 
     IEnumerator AttackDuration()
     {
-        Debug.Log("attack started");
+        //Debug.Log("attack started");
         yield return new WaitForSeconds(1f);
-        Debug.Log("attack finished");
+        //Debug.Log("attack finished");
         canAttack = true;
     }
 
@@ -152,7 +171,7 @@ public class Player : MonoBehaviour
 
     void PlayerAttack()
     {
-        Debug.Log("attacked");
+        //Debug.Log("attacked");
         StartCoroutine(AttackDuration());
         states = PlayerStates.idling;
     }

@@ -6,7 +6,7 @@ public class NextRoom : MonoBehaviour
 {
     // name of the script here
     [SerializeField]
-    PlayerEDITS player;
+    Player player;
 
     [SerializeField]
     GameObject transitionObject;
