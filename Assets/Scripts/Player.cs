@@ -14,14 +14,16 @@ public class Player : MonoBehaviour
     public int maxFeathers;
 
     //current # of feathers
-    int feathers;
+    public int feathers;
     private Rigidbody rb;
 
     //change this to change height of jumps:
     public float jumpForce;
-    private float regenTimer = 0f;
+    public float regenTimer = 0f;
     //change this to change cooldown time for feather regen
     public float featherRegenCooldown = 4.0f;
+
+    public FeatherUI featherPanel;
 
     //directional booleans for combat orientation
     bool left = true;
@@ -131,6 +133,9 @@ public class Player : MonoBehaviour
                 // DOUBLE JUMP (costs 1 feather)
                 feathers--;
                 rb.AddForce(Vector3.up * jumpForce);
+                GameObject lastObject = featherPanel.totalFeathers[featherPanel.totalFeathers.Count - 1];
+                Destroy(lastObject);
+                featherPanel.totalFeathers.RemoveAt(featherPanel.totalFeathers.Count - 1);
                 regenTimer = 0f;
             }
         }
@@ -164,6 +169,7 @@ public class Player : MonoBehaviour
         if (regenTimer >= featherRegenCooldown)
         {
             feathers++;
+            featherPanel.AddFeatherUI();
             regenTimer = 0f; // restart timer for next feather
         }
         //Debug.Log("Num Feathers Available: " + feathers); 
