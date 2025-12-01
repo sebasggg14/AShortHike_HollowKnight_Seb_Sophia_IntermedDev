@@ -5,20 +5,23 @@ public class CameraMovement : MonoBehaviour
 {
     List<Transform> instantiatedCreatures = new List<Transform>();
 
+    // collider for the camera
     BoxCollider currentRoom;
 
-    [SerializeField]
-    Transform topLeftBorder;
-    [SerializeField]
-    Transform bottomRightBorder;
+    //[SerializeField]
+    //Transform topLeftBorder;
+    //[SerializeField]
+    //Transform bottomRightBorder;
     
+    // adjust this for camera
     [SerializeField]
     float smoothValue = 1.0f;
 
     Vector3 startPos;
     Vector3 velocity = Vector3.zero;
 
-    public BasicMovement movement; // reference to whatever script has the movement code
+    public Player movement; // reference to whatever script has the movement code
+
     [SerializeField]
     float cameraXOffset = 0f;
     

@@ -1,11 +1,11 @@
 using UnityEngine;
 using System.Collections;
 
-public class Player : MonoBehaviour
+public class PlayerEDITS : MonoBehaviour
 {
     // for room transition
     public bool isActive = true;
-
+    
     // for camera offset 
     public int lastInputHorizontal = 0; // -1 means left, 1 means right
 
@@ -53,8 +53,8 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //Debug.Log(canAttack);
-        //Debug.Log("is active? " + isActive);
+        Debug.Log(canAttack);
+        Debug.Log("is active? " + isActive);
         //movement:
         Vector3 currentPos = transform.position;
         currentPos.z = 0f;
@@ -79,6 +79,7 @@ public class Player : MonoBehaviour
                 transform.Rotate(0, -270 * Time.deltaTime, 0);
             }
         }
+        transform.position = currentPos;
 
         // for smooth transition between scenes 
         if (!isActive)
@@ -144,9 +145,9 @@ public class Player : MonoBehaviour
 
     IEnumerator AttackDuration()
     {
-        //Debug.Log("attack started");
+        Debug.Log("attack started");
         yield return new WaitForSeconds(1f);
-        //Debug.Log("attack finished");
+        Debug.Log("attack finished");
         canAttack = true;
     }
 
@@ -171,7 +172,7 @@ public class Player : MonoBehaviour
 
     void PlayerAttack()
     {
-        //Debug.Log("attacked");
+        Debug.Log("attacked");
         StartCoroutine(AttackDuration());
         states = PlayerStates.idling;
     }
