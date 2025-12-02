@@ -22,7 +22,7 @@ public class Player : MonoBehaviour
     public float regenTimer = 0f;
     //change this to change cooldown time for feather regen
     public float featherRegenCooldown = 4.0f;
-
+    //ref feather ui
     public FeatherUI featherPanel;
 
     //directional booleans for combat orientation
@@ -31,6 +31,9 @@ public class Player : MonoBehaviour
     bool up = true;
     bool down = true;
     bool isGrounded = true;
+
+    //health
+    public int health = 5;
 
     //enum for attack states 
     enum PlayerStates
@@ -55,47 +58,41 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //Debug.Log(canAttack);
-        //Debug.Log("is active? " + isActive);
-        //movement:
-        Vector3 currentPos = transform.position;
-        currentPos.z = 0f;
-        float yRotation = transform.localEulerAngles.y;
-        if (yRotation > 180f) yRotation -= 360f;
 
+        float inputX = 0f;
         if (Input.GetKey(KeyCode.A) && left && isActive)
         {
-            currentPos.x -= speed * Time.deltaTime;
-            lastInputHorizontal = -1; // left 
-            if (yRotation <= -44)
-            {
-                transform.Rotate(0, 270 * Time.deltaTime, 0);
-            }
+            // left 
+            inputX = -1f;
+            lastInputHorizontal = -1;
+            rb.MoveRotation(Quaternion.Euler(0, 323.934f, 0));
         }
         if (Input.GetKey(KeyCode.D) && right && isActive)
         {
-            currentPos.x += speed * Time.deltaTime;
-            lastInputHorizontal = 1; // right
-            if (yRotation >= -136.7f)
-            {
-                transform.Rotate(0, -270 * Time.deltaTime, 0);
-            }
+            inputX = 1f;
+            lastInputHorizontal = 1;
+            rb.MoveRotation(Quaternion.Euler(0, 203.934f, 0));
         }
+
+        Vector3 velocity = rb.linearVelocity;
+        velocity.x = inputX * speed;
+        rb.linearVelocity = velocity;
 
         // for smooth transition between scenes 
         if (!isActive)
         {
             if (lastInputHorizontal == -1)
             {
-                currentPos.x -= speed * Time.deltaTime;
+                velocity.x = lastInputHorizontal * speed;
+                rb.linearVelocity = velocity;
             }
 
             if (lastInputHorizontal == 1)
             {
-                currentPos.x += speed * Time.deltaTime;
+                velocity.x = lastInputHorizontal * speed;
+                rb.linearVelocity = velocity;
             }
         }
-        transform.position = currentPos;
 
         if (Input.GetMouseButtonDown(0) && isActive)
         {
@@ -112,12 +109,11 @@ public class Player : MonoBehaviour
             PlayerAttack();
         }
 
-        if (states == PlayerStates.idling)
+        //taking damage
+        if (health <= 0)
         {
-            //canAttack = true;
+            Destroy(gameObject);
         }
-
-        
 
         //jump
         if (Input.GetKeyDown(KeyCode.Space) && isActive)
@@ -125,17 +121,25 @@ public class Player : MonoBehaviour
             if (isGrounded)
             {
                 // FIRST JUMP (free)
-                rb.AddForce(Vector3.up * jumpForce);
+                Vector3 v = rb.linearVelocity;
+                v.x = 0; // Clear push-against-wall force
+                rb.linearVelocity = v;
+                rb.AddForce(Vector3.up * jumpForce, ForceMode.VelocityChange);
                 isGrounded = false;
             }
             else if (feathers > 0)
             {
                 // DOUBLE JUMP (costs 1 feather)
                 feathers--;
-                rb.AddForce(Vector3.up * jumpForce);
+                Vector3 v = rb.linearVelocity;
+                v.x = 0; // Clear push-against-wall force
+                rb.linearVelocity = v;
+                rb.AddForce(Vector3.up * jumpForce, ForceMode.VelocityChange);
+                //destroy feather icon
                 GameObject lastObject = featherPanel.totalFeathers[featherPanel.totalFeathers.Count - 1];
                 Destroy(lastObject);
                 featherPanel.totalFeathers.RemoveAt(featherPanel.totalFeathers.Count - 1);
+                //reset timer
                 regenTimer = 0f;
             }
         }
@@ -154,11 +158,6 @@ public class Player : MonoBehaviour
         //Debug.Log("attack finished");
         canAttack = true;
     }
-
-    //IEnumerator AttackCooldown()
-    //{
-        
-    //}
 
     void AddFeathers()
     {

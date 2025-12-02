@@ -7,6 +7,10 @@ public class Enemy : MonoBehaviour
     public int maxTime = 3;
     public bool switchDir = true;
     public float speed;
+
+    public Player player;
+
+    public HealthUI healthPanel;
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -34,14 +38,46 @@ public class Enemy : MonoBehaviour
         {
             walkLeft();
         }
+        if (health <= 0)
+        {
+            Destroy(gameObject);
+        }
     }
 
     void OnTriggerEnter(Collider collider)
     {
-        if (collider.CompareTag("Player") && Player.canAttack == false)
+        if (collider.CompareTag("Stick") && Player.canAttack == false)
         {
-            health--;
+            health--; //enemy takes damage
         }
+        //player takes damage
+        if (collider.CompareTag("Player"))
+        {
+            player.health --;
+            //destroy health icon
+            GameObject lastObject = healthPanel.totalHealth[healthPanel.totalHealth.Count - 1];
+            Destroy(lastObject);
+            healthPanel.totalHealth.RemoveAt(healthPanel.totalHealth.Count - 1);
+        }
+
+    }
+
+    void OnTriggerStay(Collider collider)
+    {
+        if (collider.CompareTag("Stick") && Player.canAttack == false)
+        {
+            health--; //enemy takes damage
+        }
+        //player takes damage
+        if (collider.CompareTag("Player"))
+        {
+            player.health --;
+            //destroy health icon
+            GameObject lastObject = healthPanel.totalHealth[healthPanel.totalHealth.Count - 1];
+            Destroy(lastObject);
+            healthPanel.totalHealth.RemoveAt(healthPanel.totalHealth.Count - 1);
+        }
+
     }
 
     void walkLeft() {
