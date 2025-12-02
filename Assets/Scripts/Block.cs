@@ -21,4 +21,14 @@ public class Block : MonoBehaviour
         }
 
     }
+
+    void OnTriggerEnter (Collider collider)
+    {
+        if (collider.CompareTag("Stick") && Input.GetMouseButtonDown(0))
+        {
+            Debug.Log("Destroyed block");
+            Destroy(gameObject);
+        }
+
+    }
 }

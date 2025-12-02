@@ -62,6 +62,24 @@ public class Enemy : MonoBehaviour
 
     }
 
+    void OnTriggerStay(Collider collider)
+    {
+        if (collider.CompareTag("Stick") && Player.canAttack == false)
+        {
+            health--; //enemy takes damage
+        }
+        //player takes damage
+        if (collider.CompareTag("Player"))
+        {
+            player.health --;
+            //destroy health icon
+            GameObject lastObject = healthPanel.totalHealth[healthPanel.totalHealth.Count - 1];
+            Destroy(lastObject);
+            healthPanel.totalHealth.RemoveAt(healthPanel.totalHealth.Count - 1);
+        }
+
+    }
+
     void walkLeft() {
         Vector3 currentPos = transform.position;
         currentPos.x -= speed * Time.deltaTime;
