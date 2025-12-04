@@ -3,8 +3,16 @@ using System.Collections;
 
 public class PlayerAppearance : MonoBehaviour
 {
+    [SerializeField] // animator ref
+    Animator animator;
+
+    [SerializeField] // player ref 
+    GameObject parent;
+
+    [SerializeField] // script ref 
+    Player player;
     
-    // for character blinking 
+    // ref for all textures for character blinking 
     [SerializeField]
     Texture openEyesRed;
     [SerializeField]
@@ -14,14 +22,16 @@ public class PlayerAppearance : MonoBehaviour
     [SerializeField]
     Texture closeEyesBlue;
     
-    [SerializeField]
+    [SerializeField] // ref to the object that has the material
     GameObject child;
 
-    Material childMaterial;
+    Material childMaterial; 
     Renderer childRenderer;
 
     public bool isJumping = false;
-    bool blinking = false;
+    public bool blinking = false;
+
+    bool isIdling = false;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -29,11 +39,13 @@ public class PlayerAppearance : MonoBehaviour
         childRenderer = child.GetComponent<Renderer>();
         childMaterial = childRenderer.material;
         StartCoroutine(BlinkLoop());
+        StartCoroutine(IdleLoop());
     }
 
     // Update is called once per frame
     void Update()
     {
+        // blinking --------------------------
         if (isJumping && !blinking)
         {
             childMaterial.mainTexture = openEyesBlue;
@@ -41,6 +53,29 @@ public class PlayerAppearance : MonoBehaviour
         else if (!isJumping && !blinking)
         {
             childMaterial.mainTexture = openEyesRed;
+        }
+    }
+
+    public void IdleAnimationFinished()
+    {
+        isIdling = false;
+    }
+
+    IEnumerator IdleLoop()
+    {
+        while (true)
+        {
+
+            if (!isIdling)
+            {
+                yield return new WaitForSeconds(Random.Range(2.5f, 5f));
+                isIdling = true;
+                animator.SetTrigger("Idle");
+            }
+            else
+            {
+                yield return null; // so the coroutine closes and doesnt crash unity
+            }
         }
     }
 
@@ -64,7 +99,7 @@ public class PlayerAppearance : MonoBehaviour
             // how long the eyes stay closed
             yield return new WaitForSeconds(0.25f);
 
-            // done blinking; Update() will restore the correct open-eye texture
+            // done blinking
             blinking = false;
         }
     }
