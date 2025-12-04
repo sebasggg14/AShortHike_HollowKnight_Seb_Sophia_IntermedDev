@@ -5073,6 +5073,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animator: {fileID: 1456984898}
+  parent: {fileID: 373444680}
+  player: {fileID: 373444686}
   openEyesRed: {fileID: 2800000, guid: 0b14a11c49ff8c449b0822425f60d724, type: 3}
   closeEyesRed: {fileID: 2800000, guid: be2e6d663eb86e743bdb573c09cc6b48, type: 3}
   openEyesBlue: {fileID: 2800000, guid: 122f46237b819374ca395359e3098ed0, type: 3}

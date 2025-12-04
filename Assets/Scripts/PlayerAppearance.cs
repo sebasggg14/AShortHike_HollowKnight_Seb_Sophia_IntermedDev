@@ -6,10 +6,7 @@ public class PlayerAppearance : MonoBehaviour
     [SerializeField] // animator ref
     Animator animator;
 
-    [SerializeField] // player ref 
-    GameObject parent;
-
-    [SerializeField] // script ref 
+    [SerializeField] // player script ref 
     Player player;
     
     // ref for all textures for character blinking 
@@ -53,6 +50,16 @@ public class PlayerAppearance : MonoBehaviour
         else if (!isJumping && !blinking)
         {
             childMaterial.mainTexture = openEyesRed;
+        }
+
+        // walking -----------------
+        if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.D))
+        {
+            animator.SetBool("isWalking", true);
+        }
+        else
+        {
+            animator.SetBool("isWalking", false);
         }
     }
 
