@@ -6,6 +6,11 @@ public class PlayerAppearance : MonoBehaviour
     [SerializeField] // animator ref
     Animator animator;
 
+    Rigidbody rigidbody; // rigibody of the player parent 
+
+    [SerializeField]
+    GameObject parent;
+
     [SerializeField] // player script ref 
     Player player;
     
@@ -33,6 +38,8 @@ public class PlayerAppearance : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        rigidbody = parent.GetComponent<Rigidbody>();
+        
         childRenderer = child.GetComponent<Renderer>();
         childMaterial = childRenderer.material;
         StartCoroutine(BlinkLoop());
@@ -52,6 +59,26 @@ public class PlayerAppearance : MonoBehaviour
             childMaterial.mainTexture = openEyesRed;
         }
 
+        // jumping -----------------------
+        if (Input.GetKeyDown(KeyCode.Space) && !player.isGrounded)
+        {
+            animator.SetTrigger("InitialJump");
+        }
+        else if (Input.GetKeyDown(KeyCode.Space) && player.isGrounded)
+        {
+            animator.SetTrigger("FeatherJump");
+        }
+        
+        if (rigidbody.linearVelocity.y > 0 || rigidbody.linearVelocity.y == 0)
+        {
+            animator.SetBool("isFalling", false);
+        }
+        else
+        {
+            animator.SetBool("isFalling", true);
+        } 
+        
+
         // walking -----------------
         if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.D))
         {
@@ -61,6 +88,13 @@ public class PlayerAppearance : MonoBehaviour
         {
             animator.SetBool("isWalking", false);
         }
+
+        // attacking --------------------------
+        if (Input.GetMouseButtonDown(0))
+        {
+            animator.SetTrigger("Attack");
+        }
+
     }
 
     public void IdleAnimationFinished()

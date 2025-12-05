@@ -30,7 +30,7 @@ public class Player : MonoBehaviour
     bool right = true;
     bool up = true;
     bool down = true;
-    bool isGrounded = true;
+    public bool isGrounded = true;
 
     //health
     public int health = 5;
@@ -58,7 +58,7 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        Debug.Log("gravity" + rb.linearVelocity);
         float inputX = 0f;
         if (Input.GetKey(KeyCode.A) && left && isActive)
         {
