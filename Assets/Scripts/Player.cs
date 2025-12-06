@@ -24,6 +24,7 @@ public class Player : MonoBehaviour
     public float featherRegenCooldown = 4.0f;
     //ref feather ui
     public FeatherUI featherPanel;
+    bool isFalling = false;
 
     //directional booleans for combat orientation
     bool left = true;
@@ -58,41 +59,6 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Debug.Log("gravity" + rb.linearVelocity);
-        float inputX = 0f;
-        if (Input.GetKey(KeyCode.A) && left && isActive)
-        {
-            // left 
-            inputX = -1f;
-            lastInputHorizontal = -1;
-            rb.MoveRotation(Quaternion.Euler(0, 323.934f, 0));
-        }
-        if (Input.GetKey(KeyCode.D) && right && isActive)
-        {
-            inputX = 1f;
-            lastInputHorizontal = 1;
-            rb.MoveRotation(Quaternion.Euler(0, 203.934f, 0));
-        }
-
-        Vector3 velocity = rb.linearVelocity;
-        velocity.x = inputX * speed;
-        rb.linearVelocity = velocity;
-
-        // for smooth transition between scenes 
-        if (!isActive)
-        {
-            if (lastInputHorizontal == -1)
-            {
-                velocity.x = lastInputHorizontal * speed;
-                rb.linearVelocity = velocity;
-            }
-
-            if (lastInputHorizontal == 1)
-            {
-                velocity.x = lastInputHorizontal * speed;
-                rb.linearVelocity = velocity;
-            }
-        }
 
         if (Input.GetMouseButtonDown(0) && isActive)
         {
@@ -121,9 +87,6 @@ public class Player : MonoBehaviour
             if (isGrounded)
             {
                 // FIRST JUMP (free)
-                Vector3 v = rb.linearVelocity;
-                v.x = 0; // Clear push-against-wall force
-                rb.linearVelocity = v;
                 rb.AddForce(Vector3.up * jumpForce, ForceMode.VelocityChange);
                 isGrounded = false;
             }
@@ -131,10 +94,8 @@ public class Player : MonoBehaviour
             {
                 // DOUBLE JUMP (costs 1 feather)
                 feathers--;
-                Vector3 v = rb.linearVelocity;
-                v.x = 0; // Clear push-against-wall force
-                rb.linearVelocity = v;
                 rb.AddForce(Vector3.up * jumpForce, ForceMode.VelocityChange);
+                
                 //destroy feather icon
                 GameObject lastObject = featherPanel.totalFeathers[featherPanel.totalFeathers.Count - 1];
                 Destroy(lastObject);
@@ -148,6 +109,44 @@ public class Player : MonoBehaviour
         if (feathers < maxFeathers)
         {
             AddFeathers();
+        }
+    }
+
+    void FixedUpdate() {
+         Debug.Log("gravity" + rb.velocity);
+        float inputX = 0f;
+        if (Input.GetKey(KeyCode.A) && left && isActive)
+        {
+            // left 
+            inputX = -1f;
+            lastInputHorizontal = -1;
+            rb.MoveRotation(Quaternion.Euler(0, 323.934f, 0));
+        }
+        if (Input.GetKey(KeyCode.D) && right && isActive)
+        {
+            inputX = 1f;
+            lastInputHorizontal = 1;
+            rb.MoveRotation(Quaternion.Euler(0, 203.934f, 0));
+        }
+
+        Vector3 velocity = rb.velocity;
+        velocity.x = inputX * speed;
+        rb.velocity = velocity;
+
+        // for smooth transition between scenes 
+        if (!isActive)
+        {
+            if (lastInputHorizontal == -1)
+            {
+                velocity.x = lastInputHorizontal * speed;
+                rb.velocity = velocity;
+            }
+
+            if (lastInputHorizontal == 1)
+            {
+                velocity.x = lastInputHorizontal * speed;
+                rb.velocity = velocity;
+            }
         }
     }
 
@@ -186,6 +185,7 @@ public class Player : MonoBehaviour
         if (collision.collider.CompareTag("Ground"))
         {
             isGrounded = true; //ground check for double jump
+            isFalling = false;
         }
     }
 
