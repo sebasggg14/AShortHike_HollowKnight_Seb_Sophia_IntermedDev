@@ -113,7 +113,6 @@ public class Player : MonoBehaviour
     }
 
     void FixedUpdate() {
-         Debug.Log("gravity" + rb.velocity);
         float inputX = 0f;
         if (Input.GetKey(KeyCode.A) && left && isActive)
         {
@@ -129,9 +128,9 @@ public class Player : MonoBehaviour
             rb.MoveRotation(Quaternion.Euler(0, 203.934f, 0));
         }
 
-        Vector3 velocity = rb.velocity;
+        Vector3 velocity = rb.linearVelocity;
         velocity.x = inputX * speed;
-        rb.velocity = velocity;
+        rb.linearVelocity = velocity;
 
         // for smooth transition between scenes 
         if (!isActive)
@@ -139,13 +138,13 @@ public class Player : MonoBehaviour
             if (lastInputHorizontal == -1)
             {
                 velocity.x = lastInputHorizontal * speed;
-                rb.velocity = velocity;
+                rb.linearVelocity = velocity;
             }
 
             if (lastInputHorizontal == 1)
             {
                 velocity.x = lastInputHorizontal * speed;
-                rb.velocity = velocity;
+                rb.linearVelocity = velocity;
             }
         }
     }
@@ -175,7 +174,7 @@ public class Player : MonoBehaviour
 
     void PlayerAttack()
     {
-        //Debug.Log("attacked");
+        Debug.Log("attacked");
         StartCoroutine(AttackDuration());
         states = PlayerStates.idling;
     }

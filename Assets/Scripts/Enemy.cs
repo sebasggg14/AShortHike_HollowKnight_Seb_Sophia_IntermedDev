@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 
 public class Enemy : MonoBehaviour
 {
@@ -9,6 +10,8 @@ public class Enemy : MonoBehaviour
     public float speed;
 
     public Player player;
+
+    public bool canTakeDamage = true;
 
     public HealthUI healthPanel;
     
@@ -21,7 +24,6 @@ public class Enemy : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Debug.Log(health);
         if (time <= 0)
         {
             switchDir = true;
@@ -44,38 +46,51 @@ public class Enemy : MonoBehaviour
         }
     }
 
+    IEnumerator HealthDuration()
+    {
+        //Debug.Log("attack started");
+        yield return new WaitForSeconds(2f);
+        //Debug.Log("attack finished");
+        canTakeDamage = true;
+    }
+
+
     void OnTriggerEnter(Collider collider)
     {
-        if (collider.CompareTag("Stick") && Player.canAttack == false)
+        if (collider.CompareTag("Stick") && Player.canAttack == false && !canTakeDamage)
         {
             health--; //enemy takes damage
         }
         //player takes damage
-        if (collider.CompareTag("Player"))
+        if (collider.CompareTag("Player") && canTakeDamage)
         {
             player.health --;
             //destroy health icon
             GameObject lastObject = healthPanel.totalHealth[healthPanel.totalHealth.Count - 1];
             Destroy(lastObject);
             healthPanel.totalHealth.RemoveAt(healthPanel.totalHealth.Count - 1);
+            canTakeDamage = false;
+            StartCoroutine(HealthDuration());
         }
 
     }
 
     void OnTriggerStay(Collider collider)
     {
-        if (collider.CompareTag("Stick") && Player.canAttack == false)
+        if (collider.CompareTag("Stick") && Player.canAttack == false && !canTakeDamage)
         {
             health--; //enemy takes damage
         }
         //player takes damage
-        if (collider.CompareTag("Player"))
+        if (collider.CompareTag("Player") && canTakeDamage)
         {
             player.health --;
             //destroy health icon
             GameObject lastObject = healthPanel.totalHealth[healthPanel.totalHealth.Count - 1];
             Destroy(lastObject);
             healthPanel.totalHealth.RemoveAt(healthPanel.totalHealth.Count - 1);
+            canTakeDamage = false;
+            StartCoroutine(HealthDuration());
         }
 
     }
