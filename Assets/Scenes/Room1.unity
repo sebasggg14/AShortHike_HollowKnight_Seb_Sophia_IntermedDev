@@ -1710,17 +1710,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   parallaxStrength: 0.1
   camera: {fileID: 797164385}
---- !u!114 &373444682 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1892165444892022114, guid: 20291031b3b1a4d01bcd03bbb08aba47, type: 3}
-  m_PrefabInstance: {fileID: 1493029427}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e2eab000281f14a4bbf0adb8ae42b95a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &373444686 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2441420911299097425, guid: 20291031b3b1a4d01bcd03bbb08aba47, type: 3}
@@ -3070,7 +3059,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   smoothValue: 0.25
-  movement: {fileID: 373444686}
+  movement: {fileID: 0}
   cameraXOffset: 1
 --- !u!65 &797164390
 BoxCollider:
@@ -6860,7 +6849,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2c88c72e53de8fd4a8b54d3abda6fa42, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  script: {fileID: 373444682}
+  script: {fileID: 0}
   player: {fileID: 0}
   animator: {fileID: 1971309025}
 --- !u!1 &1978315249
@@ -7437,7 +7426,7 @@ PrefabInstance:
       objectReference: {fileID: 1079975006}
     - target: {fileID: 7145629552812777234, guid: 41db0200d2bba464c980eabba1718039, type: 3}
       propertyPath: m_VersionIndex
-      value: 10
+      value: 13
       objectReference: {fileID: 0}
     - target: {fileID: 8105491118257838293, guid: 41db0200d2bba464c980eabba1718039, type: 3}
       propertyPath: m_LocalPosition.x
