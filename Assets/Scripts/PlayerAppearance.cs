@@ -42,14 +42,14 @@ public class PlayerAppearance : MonoBehaviour
         
         childRenderer = child.GetComponent<Renderer>();
         childMaterial = childRenderer.material;
-        StartCoroutine(BlinkLoop());
-        StartCoroutine(IdleLoop());
+        StartCoroutine(BlinkLoop()); // this still repeats because of the while loop in the coroutine
+        StartCoroutine(IdleLoop()); // same case as BlinkLoop
     }
 
     // Update is called once per frame
     void Update()
     {
-        // blinking --------------------------
+        // jumping color switch --------------------------
         if (isJumping && !blinking)
         {
             childMaterial.mainTexture = openEyesBlue;
@@ -59,30 +59,38 @@ public class PlayerAppearance : MonoBehaviour
             childMaterial.mainTexture = openEyesRed;
         }
 
-        // jumping -----------------------
-        if (Input.GetKeyDown(KeyCode.Space) && !player.isGrounded)
+        // jumping action -----------------------
+        if (Input.GetKeyDown(KeyCode.Space) && player.isGrounded)
         {
             animator.SetTrigger("InitialJump");
+            isJumping = true;
+            CanceledIdle();
         }
-        else if (Input.GetKeyDown(KeyCode.Space) && player.isGrounded)
+        else if (Input.GetKeyDown(KeyCode.Space) && !player.isGrounded)
         {
             animator.SetTrigger("FeatherJump");
         }
         
-        if (rigidbody.linearVelocity.y > 0 || rigidbody.linearVelocity.y == 0)
+        if (rigidbody.linearVelocity.y > 0.01 || rigidbody.linearVelocity.y == 0) // 0.01 offset to accomodate float point accuracy 
         {
             animator.SetBool("isFalling", false);
         }
-        else
+        else if (rigidbody.linearVelocity.y < -0.01 ) // 0.01 offset to accomodate float point accuracy 
         {
             animator.SetBool("isFalling", true);
         } 
+
+        if (player.isGrounded)
+        {
+            isJumping = false;
+        }
         
 
         // walking -----------------
         if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.D))
         {
             animator.SetBool("isWalking", true);
+            CanceledIdle();
         }
         else
         {
@@ -90,14 +98,19 @@ public class PlayerAppearance : MonoBehaviour
         }
 
         // attacking --------------------------
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0) && !isJumping)
         {
             animator.SetTrigger("Attack");
         }
 
     }
 
+    // idle -----------------------------------------
     public void IdleAnimationFinished()
+    {
+        isIdling = false;
+    }
+    void CanceledIdle() // not public since im not using it in an anim
     {
         isIdling = false;
     }
@@ -109,7 +122,7 @@ public class PlayerAppearance : MonoBehaviour
 
             if (!isIdling)
             {
-                yield return new WaitForSeconds(Random.Range(2.5f, 5f));
+                yield return new WaitForSeconds(Random.Range(2.5f, 10f));
                 isIdling = true;
                 animator.SetTrigger("Idle");
             }
@@ -120,6 +133,7 @@ public class PlayerAppearance : MonoBehaviour
         }
     }
 
+    // blinking --------------------------------
     IEnumerator BlinkLoop()
     {
         while (true)
@@ -137,11 +151,8 @@ public class PlayerAppearance : MonoBehaviour
             else
                 childMaterial.mainTexture = closeEyesRed;
 
-            // how long the eyes stay closed
             yield return new WaitForSeconds(0.25f);
-
-            // done blinking
-            blinking = false;
+            blinking = false; // finish
         }
     }
 }
