@@ -113,7 +113,6 @@ public class Player : MonoBehaviour
     }
 
     void FixedUpdate() {
-         Debug.Log("gravity" + rb.linearVelocity);
         float inputX = 0f;
         if (Input.GetKey(KeyCode.A) && left && isActive)
         {
@@ -175,7 +174,7 @@ public class Player : MonoBehaviour
 
     void PlayerAttack()
     {
-        //Debug.Log("attacked");
+        Debug.Log("attacked");
         StartCoroutine(AttackDuration());
         states = PlayerStates.idling;
     }
