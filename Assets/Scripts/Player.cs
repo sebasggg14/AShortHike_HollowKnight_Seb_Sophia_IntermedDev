@@ -3,6 +3,9 @@ using System.Collections;
 
 public class Player : MonoBehaviour
 {
+    // for room transition
+    public bool isActive = true;
+
     // for camera offset 
     public int lastInputHorizontal = 0; // -1 means left, 1 means right
 
@@ -11,21 +14,27 @@ public class Player : MonoBehaviour
     public int maxFeathers;
 
     //current # of feathers
-    int feathers;
+    public int feathers;
     private Rigidbody rb;
 
     //change this to change height of jumps:
     public float jumpForce;
-    private float regenTimer = 0f;
+    public float regenTimer = 0f;
     //change this to change cooldown time for feather regen
     public float featherRegenCooldown = 4.0f;
+    //ref feather ui
+    public FeatherUI featherPanel;
+    bool isFalling = false;
 
     //directional booleans for combat orientation
     bool left = true;
     bool right = true;
     bool up = true;
     bool down = true;
-    bool isGrounded = true;
+    public bool isGrounded = true;
+
+    //health
+    public int health = 5;
 
     //enum for attack states 
     enum PlayerStates
@@ -44,39 +53,14 @@ public class Player : MonoBehaviour
     {
         feathers = maxFeathers;
         rb = GetComponent<Rigidbody>();
+        isActive = true;
     }
 
     // Update is called once per frame
     void Update()
     {
-        Debug.Log(canAttack);
-        //movement:
-        Vector3 currentPos = transform.position;
-        currentPos.z = 0f;
-        float yRotation = transform.localEulerAngles.y;
-        if (yRotation > 180f) yRotation -= 360f;
 
-        if (Input.GetKey(KeyCode.A) && left)
-        {
-            currentPos.x -= speed * Time.deltaTime;
-            lastInputHorizontal = -1; // left 
-            if (yRotation <= -44)
-            {
-                transform.Rotate(0, 270 * Time.deltaTime, 0);
-            }
-        }
-        if (Input.GetKey(KeyCode.D) && right)
-        {
-            currentPos.x += speed * Time.deltaTime;
-            lastInputHorizontal = 1; // right
-            if (yRotation >= -136.7f)
-            {
-                transform.Rotate(0, -270 * Time.deltaTime, 0);
-            }
-        }
-        transform.position = currentPos;
-
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0) && isActive)
         {
             canAttack = false;
             states = PlayerStates.attacking;
@@ -91,27 +75,32 @@ public class Player : MonoBehaviour
             PlayerAttack();
         }
 
-        if (states == PlayerStates.idling)
+        //taking damage
+        if (health <= 0)
         {
-            //canAttack = true;
+            Destroy(gameObject);
         }
 
-        
-
         //jump
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space) && isActive)
         {
             if (isGrounded)
             {
                 // FIRST JUMP (free)
-                rb.AddForce(Vector3.up * jumpForce);
+                rb.AddForce(Vector3.up * jumpForce, ForceMode.VelocityChange);
                 isGrounded = false;
             }
             else if (feathers > 0)
             {
                 // DOUBLE JUMP (costs 1 feather)
                 feathers--;
-                rb.AddForce(Vector3.up * jumpForce);
+                rb.AddForce(Vector3.up * jumpForce, ForceMode.VelocityChange);
+                
+                //destroy feather icon
+                GameObject lastObject = featherPanel.totalFeathers[featherPanel.totalFeathers.Count - 1];
+                Destroy(lastObject);
+                featherPanel.totalFeathers.RemoveAt(featherPanel.totalFeathers.Count - 1);
+                //reset timer
                 regenTimer = 0f;
             }
         }
@@ -123,18 +112,50 @@ public class Player : MonoBehaviour
         }
     }
 
-    IEnumerator AttackDuration()
-    {
-        Debug.Log("attack started");
-        yield return new WaitForSeconds(1f);
-        Debug.Log("attack finished");
-        canAttack = true;
+    void FixedUpdate() {
+        float inputX = 0f;
+        if (Input.GetKey(KeyCode.A) && left && isActive)
+        {
+            // left 
+            inputX = -1f;
+            lastInputHorizontal = -1;
+            rb.MoveRotation(Quaternion.Euler(0, 323.934f, 0));
+        }
+        if (Input.GetKey(KeyCode.D) && right && isActive)
+        {
+            inputX = 1f;
+            lastInputHorizontal = 1;
+            rb.MoveRotation(Quaternion.Euler(0, 203.934f, 0));
+        }
+
+        Vector3 velocity = rb.linearVelocity;
+        velocity.x = inputX * speed;
+        rb.linearVelocity = velocity;
+
+        // for smooth transition between scenes 
+        if (!isActive)
+        {
+            if (lastInputHorizontal == -1)
+            {
+                velocity.x = lastInputHorizontal * speed;
+                rb.linearVelocity = velocity;
+            }
+
+            if (lastInputHorizontal == 1)
+            {
+                velocity.x = lastInputHorizontal * speed;
+                rb.linearVelocity = velocity;
+            }
+        }
     }
 
-    //IEnumerator AttackCooldown()
-    //{
-        
-    //}
+    IEnumerator AttackDuration()
+    {
+        //Debug.Log("attack started");
+        yield return new WaitForSeconds(1f);
+        //Debug.Log("attack finished");
+        canAttack = true;
+    }
 
     void AddFeathers()
     {
@@ -145,6 +166,7 @@ public class Player : MonoBehaviour
         if (regenTimer >= featherRegenCooldown)
         {
             feathers++;
+            featherPanel.AddFeatherUI();
             regenTimer = 0f; // restart timer for next feather
         }
         //Debug.Log("Num Feathers Available: " + feathers); 
@@ -162,6 +184,7 @@ public class Player : MonoBehaviour
         if (collision.collider.CompareTag("Ground"))
         {
             isGrounded = true; //ground check for double jump
+            isFalling = false;
         }
     }
 

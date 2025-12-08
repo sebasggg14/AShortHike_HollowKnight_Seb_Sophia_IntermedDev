@@ -20,7 +20,7 @@ public class CameraMovement : MonoBehaviour
     Vector3 startPos;
     Vector3 velocity = Vector3.zero;
 
-    public PlayerEDITS movement; // reference to whatever script has the movement code
+    public Player movement; // reference to whatever script has the movement code
 
     [SerializeField]
     float cameraXOffset = 0f;

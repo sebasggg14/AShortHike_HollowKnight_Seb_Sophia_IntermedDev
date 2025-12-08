@@ -7,7 +7,7 @@ public class TransitionCode : MonoBehaviour
     NextRoom script;
 
     [SerializeField]
-    PlayerEDITS player;
+    Player player;
 
     [SerializeField]
     Animator animator;
