@@ -11,6 +11,9 @@ public class Enemy : MonoBehaviour
     public Player player;
 
     public HealthUI healthPanel;
+
+    [SerializeField]
+    Rigidbody rb;
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -32,10 +35,12 @@ public class Enemy : MonoBehaviour
         }
         if (switchDir)
         {
+            rb.MoveRotation(Quaternion.Euler(0, 297.14f, 0));
             walkRight();
         }
         if (!switchDir)
         {
+            rb.MoveRotation(Quaternion.Euler(0, 66.269f, 0));
             walkLeft();
         }
         if (health <= 0)
