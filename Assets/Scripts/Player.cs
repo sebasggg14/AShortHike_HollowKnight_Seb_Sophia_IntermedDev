@@ -122,7 +122,7 @@ public class Player : MonoBehaviour
         //audio
         bool holdingLeft = Input.GetKey(KeyCode.A) && left && isActive;
         bool holdingRight = Input.GetKey(KeyCode.D) && right && isActive;
-        bool holdingSpace = Input.GetKeyDown(KeyCode.Space) && isActive;
+        bool holdingSpace = Input.GetKey(KeyCode.Space) && isActive;
         bool holding = holdingRight || holdingLeft;
 
         if (holding && isGrounded)
@@ -138,9 +138,7 @@ public class Player : MonoBehaviour
         {
             if (!aud.isPlaying)
             {
-                aud.clip = jumpClip;
-                aud.loop = true;
-                aud.Play();
+                aud.PlayOneShot(jumpClip);
             }
         }
         else
