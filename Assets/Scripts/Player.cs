@@ -50,6 +50,7 @@ public class Player : MonoBehaviour
 
     AudioSource aud;
     public AudioClip dirt;
+    public AudioClip jumpClip;
 
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -90,6 +91,7 @@ public class Player : MonoBehaviour
         //jump
         if (Input.GetKeyDown(KeyCode.Space) && isActive)
         {
+            aud.PlayOneShot(jumpClip);
             if (isGrounded)
             {
                 // FIRST JUMP (free)
@@ -120,6 +122,7 @@ public class Player : MonoBehaviour
         //audio
         bool holdingLeft = Input.GetKey(KeyCode.A) && left && isActive;
         bool holdingRight = Input.GetKey(KeyCode.D) && right && isActive;
+        bool holdingSpace = Input.GetKeyDown(KeyCode.Space) && isActive;
         bool holding = holdingRight || holdingLeft;
 
         if (holding && isGrounded)
@@ -130,6 +133,15 @@ public class Player : MonoBehaviour
                     aud.loop = true;
                     aud.Play();
                 }
+        }
+        else if (holdingSpace && !isGrounded)
+        {
+            if (!aud.isPlaying)
+            {
+                aud.clip = jumpClip;
+                aud.loop = true;
+                aud.Play();
+            }
         }
         else
         {
