@@ -1,64 +1,34 @@
 using UnityEngine;
 
-[RequireComponent(typeof(AudioSource))]
-[RequireComponent(typeof(Collider))]
 public class Block : MonoBehaviour
 {
-    private AudioSource aud;
-
-    [Header("Audio")]
-    public AudioClip breaking;
-
-    [Header("Effects")]
-    public GameObject breakParticlesPrefab;   // assign in Inspector
-
-    void Awake()
+    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    void Start()
     {
-        aud = GetComponent<AudioSource>();
-        aud.playOnAwake = false;
-        aud.spatialBlend = 0f;   // 2D
-        aud.volume = 1f;
     }
 
-    void OnTriggerEnter(Collider other)
+    // Update is called once per frame
+    void Update()
     {
-        if (!other.CompareTag("Stick")) return;
-        if (Player.canAttack) return;
+    }
 
-        // --- Play sound ---
-        if (breaking != null)
-            aud.PlayOneShot(breaking, 2f);
-
-        // --- Spawn particles ---
-        if (breakParticlesPrefab != null)
+    void OnTriggerStay (Collider collider)
+    {
+        if (collider.CompareTag("Stick") && !Player.canAttack)
         {
-            GameObject p = Instantiate(
-                breakParticlesPrefab,
-                transform.position,
-                breakParticlesPrefab.transform.rotation
-            );
-            // auto-destroy particles after they finish
-            var ps = p.GetComponent<ParticleSystem>();
-            if (ps != null)
-            {
-                Destroy(p, ps.main.duration + ps.main.startLifetime.constantMax);
-            }
-            else
-            {
-                Destroy(p, 2f); // fallback
-            }
+            Debug.Log("Destroyed block");
+            Destroy(gameObject);
         }
 
-        // --- Instantly "break" block visually / physically ---
-        GetComponent<Collider>().enabled = false;
+    }
 
-        foreach (var r in GetComponentsInChildren<Renderer>())
-            r.enabled = false;
-
-        // --- Destroy object after sound is done ---
-        if (breaking != null)
-            Destroy(gameObject, breaking.length);
-        else
+    void OnTriggerEnter (Collider collider)
+    {
+        if (collider.CompareTag("Stick") && !Player.canAttack)
+        {
+            Debug.Log("Destroyed block");
             Destroy(gameObject);
+        }
+
     }
 }
