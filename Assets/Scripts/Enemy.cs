@@ -17,8 +17,6 @@ public class Enemy : MonoBehaviour
 
     [SerializeField]
     Rigidbody rb;
-
-    public bool isAttacking = false;
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -46,6 +44,10 @@ public class Enemy : MonoBehaviour
         {
             rb.MoveRotation(Quaternion.Euler(0, 66.269f, 0));
             walkLeft();
+        }
+        if (health <= 0)
+        {
+            Destroy(gameObject);
         }
     }
 
@@ -87,7 +89,6 @@ public class Enemy : MonoBehaviour
         //player takes damage
         if (collider.CompareTag("Player") && canTakeDamage)
         {
-            isAttacking = true;
             player.health --;
             //destroy health icon
             GameObject lastObject = healthPanel.totalHealth[healthPanel.totalHealth.Count - 1];
