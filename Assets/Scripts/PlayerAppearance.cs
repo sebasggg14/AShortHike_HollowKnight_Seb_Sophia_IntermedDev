@@ -66,10 +66,9 @@ public class PlayerAppearance : MonoBehaviour
         }
 
         // jumping action -----------------------
-        if (Input.GetKeyDown(KeyCode.Space) && player.isGrounded && !jumpTriggered)
+        if (Input.GetKeyDown(KeyCode.Space) && player.isGrounded)
         {
             animator.SetTrigger("InitialJump");
-            jumpTriggered = true;
             isJumping = true;
             CanceledIdle();
         }
