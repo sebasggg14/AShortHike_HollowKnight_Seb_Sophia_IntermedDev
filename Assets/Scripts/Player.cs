@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour
 {
@@ -47,6 +48,10 @@ public class Player : MonoBehaviour
 
     PlayerStates states = PlayerStates.idling;
 
+    AudioSource aud;
+    public AudioClip dirt;
+    public AudioClip jumpClip;
+
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -54,16 +59,18 @@ public class Player : MonoBehaviour
         feathers = maxFeathers;
         rb = GetComponent<Rigidbody>();
         isActive = true;
+        aud = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
     void Update()
     {
 
-        if (Input.GetMouseButtonDown(0) && isActive)
+        if (Input.GetMouseButtonDown(0) && isActive && states == PlayerStates.idling)
         {
             canAttack = false;
             states = PlayerStates.attacking;
+
         }
         else
         {
@@ -84,6 +91,7 @@ public class Player : MonoBehaviour
         //jump
         if (Input.GetKeyDown(KeyCode.Space) && isActive)
         {
+            aud.PlayOneShot(jumpClip);
             if (isGrounded)
             {
                 // FIRST JUMP (free)
@@ -110,7 +118,38 @@ public class Player : MonoBehaviour
         {
             AddFeathers();
         }
-    }
+
+        //audio
+        bool holdingLeft = Input.GetKey(KeyCode.A) && left && isActive;
+        bool holdingRight = Input.GetKey(KeyCode.D) && right && isActive;
+        bool holdingSpace = Input.GetKey(KeyCode.Space) && isActive;
+        bool holding = holdingRight || holdingLeft;
+
+        if (holding && isGrounded)
+        {
+                if (!aud.isPlaying)
+                {
+                    aud.clip = dirt;
+                    aud.loop = true;
+                    aud.Play();
+                }
+        }
+        else if (holdingSpace && !isGrounded)
+        {
+            if (!aud.isPlaying)
+            {
+                aud.PlayOneShot(jumpClip);
+            }
+        }
+        else
+        {
+            // Stop when we let go of both directions or leave ground
+            if (aud.isPlaying)
+            {
+                aud.Stop();
+            }
+        }
+}
 
     void FixedUpdate() {
         float inputX = 0f;
@@ -121,6 +160,7 @@ public class Player : MonoBehaviour
             lastInputHorizontal = -1;
             rb.MoveRotation(Quaternion.Euler(0, 323.934f, 0));
         }
+
         if (Input.GetKey(KeyCode.D) && right && isActive)
         {
             inputX = 1f;
