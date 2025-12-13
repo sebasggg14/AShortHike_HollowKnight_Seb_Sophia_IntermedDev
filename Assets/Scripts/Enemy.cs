@@ -19,6 +19,8 @@ public class Enemy : MonoBehaviour
     Rigidbody rb;
 
     public bool isAttacking = false;
+
+    bool dying = false;
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -37,16 +39,23 @@ public class Enemy : MonoBehaviour
         {
             switchDir = false;
         }
-        if (switchDir)
+        if (switchDir && !dying)
         {
             rb.MoveRotation(Quaternion.Euler(0, 297.14f, 0));
             walkRight();
         }
-        if (!switchDir)
+        if (!switchDir && !dying)
         {
             rb.MoveRotation(Quaternion.Euler(0, 66.269f, 0));
             walkLeft();
         }
+
+        if (health <= 0)
+        {
+            maxTime = 0;
+            time = 0;
+            dying = true;
+        } 
     }
 
     IEnumerator HealthDuration()

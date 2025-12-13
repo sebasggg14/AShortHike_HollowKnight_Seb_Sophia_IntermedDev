@@ -11,6 +11,8 @@ public class EnemyAppearance : MonoBehaviour
     [SerializeField]
     GameObject enemyObject;
 
+    private bool isDying;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -20,15 +22,23 @@ public class EnemyAppearance : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (enemy.isAttacking && !animator.GetBool("Death"))
+        if (!isDying && enemy.health <= 0)
         {
-            animator.SetTrigger("Attack");
+            isDying = true;
+
+            animator.ResetTrigger("Attack");     // stop attack from interrupting
+            animator.SetTrigger("Death");        // prefer trigger for one-shot death
+            return;
         }
 
-        if (enemy.health <= 0)
+        if (isDying) return; // nothing else can interrupt death
+
+        if (enemy.isAttacking)
         {
-            animator.SetBool("Death", true);
+            animator.SetTrigger("Attack");
+            enemy.isAttacking = false; // IMPORTANT: clear it here or via animation event
         }
+        Debug.Log($"health={enemy.health}, enemyRef={enemy.name}", this);
     }
 
     public void updateIsAttacking()

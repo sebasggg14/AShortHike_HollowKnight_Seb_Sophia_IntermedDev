@@ -52,6 +52,8 @@ public class Player : MonoBehaviour
     public AudioClip dirt;
     public AudioClip jumpClip;
 
+    public float fallGravityMultiplier = 2.5f;   // faster fall
+    public float lowJumpMultiplier = 2.0f;  
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -134,7 +136,7 @@ public class Player : MonoBehaviour
                     aud.Play();
                 }
         }
-        else if (holdingSpace && !isGrounded)
+        else if (holdingSpace && !isGrounded && feathers > 0)
         {
             if (!aud.isPlaying)
             {
@@ -171,6 +173,19 @@ public class Player : MonoBehaviour
         Vector3 velocity = rb.linearVelocity;
         velocity.x = inputX * speed;
         rb.linearVelocity = velocity;
+
+        float vy = rb.linearVelocity.y;
+
+        // If falling, apply extra gravity
+        if (vy < 0f)
+        {
+            rb.linearVelocity += Vector3.up * Physics.gravity.y * (fallGravityMultiplier - 1f) * Time.fixedDeltaTime;
+        }
+        // If rising but jump released early, apply extra gravity (short hop)
+        else if (vy > 0f && !Input.GetKey(KeyCode.Space))
+        {
+            rb.linearVelocity += Vector3.up * Physics.gravity.y * (lowJumpMultiplier - 1f) * Time.fixedDeltaTime;
+        }
 
         // for smooth transition between scenes 
         if (!isActive)

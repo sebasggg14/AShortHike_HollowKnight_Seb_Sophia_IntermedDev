@@ -38,6 +38,8 @@ public class PlayerAppearance : MonoBehaviour
     AudioSource aud;
     public AudioClip attacking;
 
+    private bool jumpTriggered;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -52,6 +54,7 @@ public class PlayerAppearance : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        animator.SetBool("isGrounded", player.isGrounded);
         // jumping color switch --------------------------
         if (isJumping && !blinking)
         {
@@ -63,42 +66,31 @@ public class PlayerAppearance : MonoBehaviour
         }
 
         // jumping action -----------------------
-        if (Input.GetKeyDown(KeyCode.Space) && player.isGrounded)
+        if (Input.GetKeyDown(KeyCode.Space) && player.isGrounded && !jumpTriggered)
         {
             animator.SetTrigger("InitialJump");
+            jumpTriggered = true;
             isJumping = true;
             CanceledIdle();
         }
         else if (Input.GetKeyDown(KeyCode.Space) && !player.isGrounded)
         {
             animator.SetTrigger("FeatherJump");
+            isJumping = true;
         }
-        
-        if (rigidbody.linearVelocity.y > 0.01 || rigidbody.linearVelocity.y == 0) // 0.01 offset to accomodate float point accuracy 
-        {
-            animator.SetBool("isFalling", false);
-        }
-        else if (rigidbody.linearVelocity.y < -0.01 ) // 0.01 offset to accomodate float point accuracy 
-        {
-            animator.SetBool("isFalling", true);
-        } 
 
+        // Reset jumpTriggered once we actually leave the ground
+        if (jumpTriggered && !player.isGrounded)
+            jumpTriggered = false;
+
+        // End jump state when grounded again
         if (player.isGrounded)
-        {
             isJumping = false;
-        }
-        
+
 
         // walking -----------------
-        if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.D))
-        {
-            animator.SetBool("isWalking", true);
-            CanceledIdle();
-        }
-        else
-        {
-            animator.SetBool("isWalking", false);
-        }
+        bool moveInput = Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.S);
+        animator.SetBool("isWalking", player.isGrounded && moveInput);
 
         // attacking --------------------------
         if (Input.GetMouseButtonDown(0) && Player.canAttack && !isJumping)
@@ -108,6 +100,24 @@ public class PlayerAppearance : MonoBehaviour
             aud.PlayOneShot(attacking);
         }
 
+
+    }
+
+    private float lastVy;
+    void FixedUpdate()
+    {
+        float vy = rigidbody.velocity.y;
+
+        bool startedFalling = (lastVy > 0.05f && vy <= 0.05f); // crossed apex OR got stalled
+        if (startedFalling) animator.SetBool("isFalling", true);
+
+        // If actually moving upward again (double jump), clear falling
+        if (vy > 0.05f) animator.SetBool("isFalling", false);
+
+        // If grounded, clear falling
+        if (player.isGrounded) animator.SetBool("isFalling", false);
+
+        lastVy = vy;
     }
 
     // idle -----------------------------------------
