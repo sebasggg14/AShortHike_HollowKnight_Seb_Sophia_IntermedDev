@@ -35,11 +35,14 @@ public class PlayerAppearance : MonoBehaviour
 
     bool isIdling = false;
 
+    AudioSource aud;
+    public AudioClip attacking;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         rigidbody = parent.GetComponent<Rigidbody>();
-        
+        aud = GetComponent<AudioSource>();
         childRenderer = child.GetComponent<Renderer>();
         childMaterial = childRenderer.material;
         StartCoroutine(BlinkLoop()); // this still repeats because of the while loop in the coroutine
@@ -98,9 +101,11 @@ public class PlayerAppearance : MonoBehaviour
         }
 
         // attacking --------------------------
-        if (Input.GetMouseButtonDown(0) && !isJumping)
+        if (Input.GetMouseButtonDown(0) && Player.canAttack && !isJumping)
         {
+            
             animator.SetTrigger("Attack");
+            aud.PlayOneShot(attacking);
         }
 
     }

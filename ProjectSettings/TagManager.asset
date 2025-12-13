@@ -9,6 +9,7 @@ TagManager:
   - Ground
   - NextRoom
   - Stick
+  - ChatZone
   layers:
   - Default
   - TransparentFX
