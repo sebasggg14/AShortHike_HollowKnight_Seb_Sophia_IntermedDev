@@ -32,9 +32,12 @@ public class Block : MonoBehaviour
         // --- Spawn particles ---
         if (breakParticlesPrefab != null)
         {
+           Vector3 spawnOffset = new Vector3(0f, 15f, 1f);
+            Vector3 spawnPos = transform.position + spawnOffset;
+
             GameObject p = Instantiate(
                 breakParticlesPrefab,
-                transform.position,
+                spawnPos,
                 breakParticlesPrefab.transform.rotation
             );
             // auto-destroy particles after they finish
