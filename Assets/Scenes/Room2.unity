@@ -11435,11 +11435,15 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 3134119980487756070, guid: 1ae7033005ec34209b06f2570e6d0712, type: 3}
       insertIndex: -1
 <<<<<<< HEAD
+<<<<<<< HEAD
       addedObject: {fileID: 866894383}
 >>>>>>> parent of 6d3d993 (Merge pull request #19 from sebasggg14/sebas-pull-test)
 =======
       addedObject: {fileID: 533553308}
 >>>>>>> parent of f482757 (Revert "Merge pull request #19 from sebasggg14/sebas-pull-test")
+=======
+      addedObject: {fileID: 533553308}
+>>>>>>> parent of 55d2cb4 (Merge pull request #20 from sebasggg14/sebastian)
   m_SourcePrefab: {fileID: 100100000, guid: 1ae7033005ec34209b06f2570e6d0712, type: 3}
 --- !u!1001 &894309236
 PrefabInstance:
@@ -13116,9 +13120,12 @@ Mesh:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 =======
 >>>>>>> parent of f482757 (Revert "Merge pull request #19 from sebasggg14/sebas-pull-test")
+=======
+>>>>>>> parent of 55d2cb4 (Merge pull request #20 from sebasggg14/sebastian)
 --- !u!1001 &1032602950
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -13168,6 +13175,7 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
 <<<<<<< HEAD
+<<<<<<< HEAD
     - target: {fileID: 919132149155446097, guid: f1bbb1df2b22d354cac4f40582157ea3, type: 3}
 =======
     m_RemovedComponents:
@@ -13208,6 +13216,9 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 307331693409501870, guid: ddfa3a33b392a45548d2eaa55284079c, type: 3}
 >>>>>>> parent of f482757 (Revert "Merge pull request #19 from sebasggg14/sebas-pull-test")
+=======
+    - target: {fileID: 919132149155446097, guid: f1bbb1df2b22d354cac4f40582157ea3, type: 3}
+>>>>>>> parent of 55d2cb4 (Merge pull request #20 from sebasggg14/sebastian)
       propertyPath: m_Name
       value: Mom_NPC_Export
       objectReference: {fileID: 0}
@@ -13225,11 +13236,14 @@ PrefabInstance:
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f1bbb1df2b22d354cac4f40582157ea3, type: 3}
 <<<<<<< HEAD
+<<<<<<< HEAD
 >>>>>>> parent of b5b8479 (Merge branch 'sebastian' into sebas-pull-test)
 =======
 >>>>>>> parent of 6d3d993 (Merge pull request #19 from sebasggg14/sebas-pull-test)
 =======
 >>>>>>> parent of f482757 (Revert "Merge pull request #19 from sebasggg14/sebas-pull-test")
+=======
+>>>>>>> parent of 55d2cb4 (Merge pull request #20 from sebasggg14/sebastian)
 --- !u!1 &1036496966
 GameObject:
   m_ObjectHideFlags: 0
