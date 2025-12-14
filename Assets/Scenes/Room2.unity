@@ -2609,6 +2609,8 @@ MonoBehaviour:
   animator: {fileID: 218488381}
   enemy: {fileID: 1205928553}
   enemyObject: {fileID: 1205928551}
+  deathSFX: {fileID: 8300000, guid: 5d08a97a1c984f74f9420dbe16910c6a, type: 3}
+  breakParticlesPrefab: {fileID: 2993767449964793050, guid: b17a7d375d5c05341bf9e679b205d113, type: 3}
 --- !u!1001 &222427748
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -12039,6 +12041,8 @@ MonoBehaviour:
   animator: {fileID: 927863178}
   enemy: {fileID: 413407763}
   enemyObject: {fileID: 413407757}
+  deathSFX: {fileID: 8300000, guid: 5d08a97a1c984f74f9420dbe16910c6a, type: 3}
+  breakParticlesPrefab: {fileID: 2993767449964793050, guid: b17a7d375d5c05341bf9e679b205d113, type: 3}
 --- !u!1 &941214190
 GameObject:
   m_ObjectHideFlags: 0
@@ -12372,6 +12376,8 @@ MonoBehaviour:
   animator: {fileID: 956739559}
   enemy: {fileID: 533553309}
   enemyObject: {fileID: 533553303}
+  deathSFX: {fileID: 8300000, guid: 5d08a97a1c984f74f9420dbe16910c6a, type: 3}
+  breakParticlesPrefab: {fileID: 2993767449964793050, guid: b17a7d375d5c05341bf9e679b205d113, type: 3}
 --- !u!82 &956739562
 AudioSource:
   m_ObjectHideFlags: 0
