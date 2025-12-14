@@ -68,6 +68,7 @@ public class Player : MonoBehaviour
     void Update()
     {
 
+        Debug.Log(canAttack);
         if (Input.GetMouseButtonDown(0) && isActive && states == PlayerStates.idling)
         {
             canAttack = false;

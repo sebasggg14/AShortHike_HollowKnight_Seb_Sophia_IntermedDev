@@ -21,6 +21,9 @@ public class Enemy : MonoBehaviour
     public bool isAttacking = false;
 
     bool dying = false;
+
+    bool canEnemyTakeDamage = true;
+    bool canPlayerTakeDamage = true;
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -58,54 +61,51 @@ public class Enemy : MonoBehaviour
         } 
     }
 
-    IEnumerator HealthDuration()
+    void OnTriggerEnter(Collider other)
     {
-        //Debug.Log("attack started");
-        yield return new WaitForSeconds(2f);
-        //Debug.Log("attack finished");
-        canTakeDamage = true;
+        // PLAYER → ENEMY (stick attack)
+        if (other.CompareTag("Stick") && !Player.canAttack && canEnemyTakeDamage)
+        {
+            TakeEnemyDamage();
+        }
+
+        // ENEMY → PLAYER (body contact)
+        if (other.CompareTag("Player") && canPlayerTakeDamage && health > 0)
+        {
+            TakePlayerDamage();
+        }
     }
 
-
-    void OnTriggerEnter(Collider collider)
+    void TakeEnemyDamage()
     {
-        if (collider.CompareTag("Stick") && Player.canAttack == false && !canTakeDamage)
-        {
-            health--; //enemy takes damage
-        }
-        //player takes damage
-        if (collider.CompareTag("Player") && canTakeDamage)
-        {
-            player.health --;
-            //destroy health icon
-            GameObject lastObject = healthPanel.totalHealth[healthPanel.totalHealth.Count - 1];
-            Destroy(lastObject);
-            healthPanel.totalHealth.RemoveAt(healthPanel.totalHealth.Count - 1);
-            canTakeDamage = false;
-            StartCoroutine(HealthDuration());
-        }
-
+        health--;
+        canEnemyTakeDamage = false;
+        StartCoroutine(EnemyDamageCooldown());
     }
 
-    void OnTriggerStay(Collider collider)
+    void TakePlayerDamage()
     {
-        if (collider.CompareTag("Stick") && Player.canAttack == false && !canTakeDamage)
-        {
-            health--; //enemy takes damage
-        }
-        //player takes damage
-        if (collider.CompareTag("Player") && canTakeDamage)
-        {
-            isAttacking = true;
-            player.health --;
-            //destroy health icon
-            GameObject lastObject = healthPanel.totalHealth[healthPanel.totalHealth.Count - 1];
-            Destroy(lastObject);
-            healthPanel.totalHealth.RemoveAt(healthPanel.totalHealth.Count - 1);
-            canTakeDamage = false;
-            StartCoroutine(HealthDuration());
-        }
+        player.health--;
 
+        GameObject lastObject =
+            healthPanel.totalHealth[healthPanel.totalHealth.Count - 1];
+        Destroy(lastObject);
+        healthPanel.totalHealth.RemoveAt(healthPanel.totalHealth.Count - 1);
+
+        canPlayerTakeDamage = false;
+        StartCoroutine(PlayerDamageCooldown());
+    }
+
+    IEnumerator EnemyDamageCooldown()
+    {
+        yield return new WaitForSeconds(0.4f);
+        canEnemyTakeDamage = true;
+    }
+
+    IEnumerator PlayerDamageCooldown()
+    {
+        yield return new WaitForSeconds(1.0f);
+        canPlayerTakeDamage = true;
     }
 
     void walkLeft() {
