@@ -10,6 +10,7 @@ TagManager:
   - NextRoom
   - Stick
   - ChatZone
+  - wood
   layers:
   - Default
   - TransparentFX

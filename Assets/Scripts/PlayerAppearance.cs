@@ -105,7 +105,7 @@ public class PlayerAppearance : MonoBehaviour
     private float lastVy;
     void FixedUpdate()
     {
-        float vy = rigidbody.velocity.y;
+        float vy = rigidbody.linearVelocity.y;
 
         bool startedFalling = (lastVy > 0.05f && vy <= 0.05f); // crossed apex OR got stalled
         if (startedFalling) animator.SetBool("isFalling", true);
