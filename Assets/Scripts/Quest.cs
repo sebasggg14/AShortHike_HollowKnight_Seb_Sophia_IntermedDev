@@ -81,6 +81,7 @@ public class Quest : MonoBehaviour
                     //show 
                     mainBox.gameObject.SetActive(false); 
                     wBox.gameObject.SetActive(false); //hide w option
+                    ObjectivesTracker.questComplete = true; 
                     completeBox.gameObject.SetActive(true);
                 }
             }
