@@ -11,6 +11,7 @@ TagManager:
   - Stick
   - ChatZone
   - wood
+  - Start
   layers:
   - Default
   - TransparentFX
