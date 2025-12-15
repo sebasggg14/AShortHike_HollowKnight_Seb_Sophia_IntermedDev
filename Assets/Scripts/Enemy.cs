@@ -57,6 +57,7 @@ public class Enemy : MonoBehaviour
         {
             maxTime = 0;
             time = 0;
+            ObjectivesTracker.enemiesKilled++;
             dying = true;
         } 
     }
