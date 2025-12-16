@@ -21997,7 +21997,27 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1494431652750365, guid: e28b90f90bc144a4e83ac2c88d1089ef, type: 3}
       propertyPath: m_text
-      value: Hmm... Looks like I need some help getting past this rock.
+      value: Hmm... Maybe someone can help me get over this rock
+      objectReference: {fileID: 0}
+    - target: {fileID: 922901919652911208, guid: e28b90f90bc144a4e83ac2c88d1089ef, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 23.3419
+      objectReference: {fileID: 0}
+    - target: {fileID: 922901919652911208, guid: e28b90f90bc144a4e83ac2c88d1089ef, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 7.9181
+      objectReference: {fileID: 0}
+    - target: {fileID: 922901919652911208, guid: e28b90f90bc144a4e83ac2c88d1089ef, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -1.3028
+      objectReference: {fileID: 0}
+    - target: {fileID: 922901919652911208, guid: e28b90f90bc144a4e83ac2c88d1089ef, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -0.2182
+      objectReference: {fileID: 0}
+    - target: {fileID: 922901919652911208, guid: e28b90f90bc144a4e83ac2c88d1089ef, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -0.9832
       objectReference: {fileID: 0}
     - target: {fileID: 3712166316201958430, guid: e28b90f90bc144a4e83ac2c88d1089ef, type: 3}
       propertyPath: m_LocalScale.x
