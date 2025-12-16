@@ -51,6 +51,8 @@ public class Player : MonoBehaviour
     AudioSource aud;
     public AudioClip dirt;
     public AudioClip jumpClip;
+    public AudioClip landClip;
+
 
     public float fallGravityMultiplier = 2.5f;   // faster fall
     public float lowJumpMultiplier = 2.0f;  
@@ -241,6 +243,14 @@ public class Player : MonoBehaviour
         {
             isGrounded = true; //ground check for double jump
             isFalling = false;
+            var go = new GameObject("SFX_Collect");
+            go.transform.position = Camera.main.transform.position; // play at listener so it's always loud
+            var src = go.AddComponent<AudioSource>();
+            src.clip = landClip;
+            src.spatialBlend = 0f;   // 2D
+            src.volume = 1f;
+            src.Play();
+            Destroy(go, landClip.length);
         }
     }
 

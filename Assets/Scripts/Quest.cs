@@ -6,6 +6,12 @@ public class Quest : MonoBehaviour
     private Transform mainBox;
     private Transform completeBox;
     public bool questComplete = false;
+
+    public static bool showAudioForFirsttime = false;
+
+    AudioSource aud;
+    public AudioClip defaultNoise;
+    public AudioClip completionNoise;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -75,6 +81,14 @@ public class Quest : MonoBehaviour
                     mainBox.gameObject.SetActive(true); 
                     wBox.gameObject.SetActive(false); //hide w option
                     completeBox.gameObject.SetActive(false);
+                    var go = new GameObject("SFX_Collect");
+                    go.transform.position = Camera.main.transform.position; // play at listener so it's always loud
+                    var src = go.AddComponent<AudioSource>();
+                    src.clip = defaultNoise;
+                    src.spatialBlend = 0f;   // 2D
+                    src.volume = 1f;
+                    src.Play();
+                    Destroy(go, defaultNoise.length);
                 }
                 else //prompt completed quest dialogue
                 {
@@ -83,6 +97,20 @@ public class Quest : MonoBehaviour
                     wBox.gameObject.SetActive(false); //hide w option
                     ObjectivesTracker.questComplete = true; 
                     completeBox.gameObject.SetActive(true);
+
+                    if (showAudioForFirsttime)
+                    {
+                        var go = new GameObject("SFX_Collect");
+                        go.transform.position = Camera.main.transform.position; // play at listener so it's always loud
+                        var src = go.AddComponent<AudioSource>();
+                        src.clip = completionNoise;
+                        src.spatialBlend = 0f;   // 2D
+                        src.volume = 1f;
+                        src.Play();
+                        Destroy(go, completionNoise.length);
+                        showAudioForFirsttime = false;
+                    }
+                    
                 }
             }
         }

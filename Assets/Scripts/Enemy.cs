@@ -61,6 +61,7 @@ public class Enemy : MonoBehaviour
             maxTime = 0;
             time = 0;
             ObjectivesTracker.enemiesKilled++;
+            if (ObjectivesTracker.enemiesKilled == 3) Quest.showAudioForFirsttime = true;
             dying = true;
         } 
     }
@@ -92,8 +93,7 @@ public class Enemy : MonoBehaviour
     {
         player.health--;
         aud.PlayOneShot(damage);
-        GameObject lastObject =
-            healthPanel.totalHealth[healthPanel.totalHealth.Count - 1];
+        GameObject lastObject = healthPanel.totalHealth[healthPanel.totalHealth.Count - 1];
         Destroy(lastObject);
         healthPanel.totalHealth.RemoveAt(healthPanel.totalHealth.Count - 1);
 
