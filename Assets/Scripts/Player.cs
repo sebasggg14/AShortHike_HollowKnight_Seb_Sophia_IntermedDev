@@ -70,7 +70,9 @@ public class Player : MonoBehaviour
     void Update()
     {
 
-        Debug.Log(canAttack);
+        //death
+        if (health <= 0) SceneManager.LoadScene("gameover");
+
         if (Input.GetMouseButtonDown(0) && isActive && states == PlayerStates.idling)
         {
             canAttack = false;

@@ -78,7 +78,6 @@ public class Enemy : MonoBehaviour
         if (other.CompareTag("Player") && canPlayerTakeDamage && health > 0)
         {
             TakePlayerDamage();
-
         }
     }
 

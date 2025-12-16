@@ -14,10 +14,13 @@ public class MenuNavigator : MonoBehaviour
     [SerializeField] private string startSceneName = "room1";
 
     private int index = 0; // 0 = Start, 1 = Quit
+    AudioSource src;
+    public AudioClip bgMusic;
 
     void Start()
     {
         UpdateArrowPosition();
+        src = GetComponent<AudioSource>();
     }
 
     void Update()
@@ -26,11 +29,23 @@ public class MenuNavigator : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow))
         {
             index = 0;
+            src = gameObject.AddComponent<AudioSource>();
+            src.clip = bgMusic;
+            src.spatialBlend = 0f; // 2D (THIS is why it's loud)
+            src.volume = 1f;
+            src.loop = false;
+            src.Play();
             UpdateArrowPosition();
         }
         else if (Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow))
         {
             index = 1;
+            src = gameObject.AddComponent<AudioSource>();
+            src.clip = bgMusic;
+            src.spatialBlend = 0f; // 2D (THIS is why it's loud)
+            src.volume = 1f;
+            src.loop = false;
+            src.Play();
             UpdateArrowPosition();
         }
 
