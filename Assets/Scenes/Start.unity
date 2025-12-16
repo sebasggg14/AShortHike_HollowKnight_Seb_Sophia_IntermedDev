@@ -629,6 +629,10 @@ PrefabInstance:
       propertyPath: bgMusic
       value: 
       objectReference: {fileID: 8300000, guid: 5dc366fff797daf468203d5e07f735b7, type: 3}
+    - target: {fileID: 4895977013707351952, guid: 94fd44058cd24b64894a51609e23fc21, type: 3}
+      propertyPath: startSceneName
+      value: sophiaroom1
+      objectReference: {fileID: 0}
     - target: {fileID: 7237112560066826624, guid: 94fd44058cd24b64894a51609e23fc21, type: 3}
       propertyPath: m_Name
       value: Canvas

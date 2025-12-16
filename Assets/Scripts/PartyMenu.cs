@@ -2,16 +2,14 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using TMPro;
 
-public class MenuNavigator : MonoBehaviour
-{
-    [Header("UI References")]
+public class PartyMenu : MonoBehaviour
+{[Header("UI References")]
     [SerializeField] private RectTransform arrow;      // Arrow UI object
     [SerializeField] private RectTransform startItem;  // Start text RectTransform
     [SerializeField] private RectTransform quitItem;   // Quit text RectTransform
 
     [Header("Settings")]
     [SerializeField] private float arrowXOffset = -70f; // how far left of text the arrow sits
-    [SerializeField] private string startSceneName = "sophiaroom1";
 
     private int index = 0; // 0 = Start, 1 = Quit
     AudioSource src;
@@ -54,14 +52,11 @@ public class MenuNavigator : MonoBehaviour
         {
             if (index == 0)
             {
-                SceneManager.LoadScene(startSceneName);
+                SceneManager.LoadScene("goodending");
             }
             else
             {
-                Application.Quit();
-#if UNITY_EDITOR
-                UnityEditor.EditorApplication.isPlaying = false;
-#endif
+                SceneManager.LoadScene("gameover");
             }
         }
     }
@@ -69,10 +64,6 @@ public class MenuNavigator : MonoBehaviour
     private void UpdateArrowPosition()
     {
         RectTransform target = (index == 0) ? startItem : quitItem;
-        if (index == 1)
-        {
-            arrow.localPosition = target.localPosition + new Vector3(-73, 0, 0);
-        }
-        arrow.localPosition = target.localPosition + new Vector3(-62, 0, 0);
+        arrow.localPosition = target.localPosition + new Vector3(-0.04f, 0, 0);
     }
 }
