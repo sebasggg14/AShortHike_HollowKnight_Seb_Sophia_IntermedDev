@@ -24,11 +24,14 @@ public class Enemy : MonoBehaviour
 
     bool canEnemyTakeDamage = true;
     bool canPlayerTakeDamage = true;
+
+    AudioSource aud;
+    public AudioClip damage;
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
+        aud = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -74,6 +77,7 @@ public class Enemy : MonoBehaviour
         if (other.CompareTag("Player") && canPlayerTakeDamage && health > 0)
         {
             TakePlayerDamage();
+
         }
     }
 
@@ -87,7 +91,7 @@ public class Enemy : MonoBehaviour
     void TakePlayerDamage()
     {
         player.health--;
-
+        aud.PlayOneShot(damage);
         GameObject lastObject =
             healthPanel.totalHealth[healthPanel.totalHealth.Count - 1];
         Destroy(lastObject);
