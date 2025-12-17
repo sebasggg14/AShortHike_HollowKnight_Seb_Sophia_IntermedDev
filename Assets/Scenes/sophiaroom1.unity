@@ -2467,6 +2467,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   parallaxStrength: 0.2
   camera: {fileID: 797164385}
+--- !u!114 &238651283 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1021120989500855044, guid: 75297be85c4ccf248b8dfe0cbca1e4dd, type: 3}
+  m_PrefabInstance: {fileID: 322775246}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2b536172eba651a4b859e69dfcfc044d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &246345872
 GameObject:
   m_ObjectHideFlags: 0
@@ -3866,6 +3877,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 830351508861606290, guid: 75297be85c4ccf248b8dfe0cbca1e4dd, type: 3}
+      propertyPath: appearance
+      value: 
+      objectReference: {fileID: 238651283}
+    - target: {fileID: 830351508861606290, guid: 75297be85c4ccf248b8dfe0cbca1e4dd, type: 3}
+      propertyPath: featherPanel
+      value: 
+      objectReference: {fileID: 1767940083}
     - target: {fileID: 3718555325435599919, guid: 75297be85c4ccf248b8dfe0cbca1e4dd, type: 3}
       propertyPath: m_Name
       value: Player 2
@@ -6015,6 +6034,10 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: b60ca7b463e7044459f43ef8c6fbd7b0, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8391222552659086748, guid: b60ca7b463e7044459f43ef8c6fbd7b0, type: 3}
+      propertyPath: m_TagString
+      value: Ground
       objectReference: {fileID: 0}
     - target: {fileID: -5477749408508380018, guid: b60ca7b463e7044459f43ef8c6fbd7b0, type: 3}
       propertyPath: m_LocalScale.x
@@ -14966,6 +14989,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Stick_Weapon (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: f2897c2f9f1400a4bbe6a2ca1736299b, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -16788,7 +16815,7 @@ PrefabInstance:
     - target: {fileID: 1557888490730766558, guid: 4c64054e5b28743a0bb41cf89d1d5560, type: 3}
       propertyPath: player
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 1842960650}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -16861,6 +16888,10 @@ PrefabInstance:
     - target: {fileID: 1830487060652791247, guid: 9984b07b35a531942a028f8e5d94d056, type: 3}
       propertyPath: m_Name
       value: Bush1 (9)
+      objectReference: {fileID: 0}
+    - target: {fileID: 1830487060652791247, guid: 9984b07b35a531942a028f8e5d94d056, type: 3}
+      propertyPath: m_TagString
+      value: Ground
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -17485,6 +17516,10 @@ PrefabInstance:
     - target: {fileID: 5224168035868545038, guid: 35bfe43a81b94784d9a9168ab65a4354, type: 3}
       propertyPath: m_Name
       value: Bush2 (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 5224168035868545038, guid: 35bfe43a81b94784d9a9168ab65a4354, type: 3}
+      propertyPath: m_TagString
+      value: Ground
       objectReference: {fileID: 0}
     - target: {fileID: 7296228759915700591, guid: 35bfe43a81b94784d9a9168ab65a4354, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
@@ -20264,6 +20299,10 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: b60ca7b463e7044459f43ef8c6fbd7b0, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8391222552659086748, guid: b60ca7b463e7044459f43ef8c6fbd7b0, type: 3}
+      propertyPath: m_TagString
+      value: Ground
       objectReference: {fileID: 0}
     - target: {fileID: -5477749408508380018, guid: b60ca7b463e7044459f43ef8c6fbd7b0, type: 3}
       propertyPath: m_LocalScale.x
@@ -23765,6 +23804,17 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1753370862}
   m_Mesh: {fileID: -462981019419857548, guid: b60ca7b463e7044459f43ef8c6fbd7b0, type: 3}
+--- !u!114 &1767940083 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 878132512065107911, guid: 552d19f1cf3b1495ea93ebf854883767, type: 3}
+  m_PrefabInstance: {fileID: 5177259522319922261}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 59d0f68286e4b421bb16823a1eb86bd8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1776142859
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -27528,7 +27578,7 @@ PrefabInstance:
     - target: {fileID: 878132512065107911, guid: 552d19f1cf3b1495ea93ebf854883767, type: 3}
       propertyPath: player
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 1842960650}
     - target: {fileID: 4842351116146096384, guid: 552d19f1cf3b1495ea93ebf854883767, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5

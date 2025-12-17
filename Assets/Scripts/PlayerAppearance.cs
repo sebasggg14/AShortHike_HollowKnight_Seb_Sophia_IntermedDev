@@ -92,14 +92,6 @@ public class PlayerAppearance : MonoBehaviour
         animator.SetBool("isWalking", player.isGrounded && moveInput);
 
         // attacking --------------------------
-        if (Input.GetMouseButtonDown(0) && Player.canAttack && !isJumping)
-        {
-            
-            animator.SetTrigger("Attack");
-            aud.PlayOneShot(attacking);
-        }
-
-
     }
 
     private float lastVy;
@@ -168,5 +160,11 @@ public class PlayerAppearance : MonoBehaviour
             yield return new WaitForSeconds(0.25f);
             blinking = false; // finish
         }
+    }
+
+    public void PlayAttack()
+    {
+        animator.SetTrigger("Attack");
+        if (attacking != null) aud.PlayOneShot(attacking);
     }
 }

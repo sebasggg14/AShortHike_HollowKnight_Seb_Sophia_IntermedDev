@@ -56,6 +56,8 @@ public class Player : MonoBehaviour
 
     public float fallGravityMultiplier = 2.5f;   // faster fall
     public float lowJumpMultiplier = 2.0f;  
+    [SerializeField] private PlayerAppearance appearance;
+    private Coroutine attackRoutine;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -73,20 +75,12 @@ public class Player : MonoBehaviour
         //death
         if (health <= 0) SceneManager.LoadScene("gameover");
 
-        if (Input.GetMouseButtonDown(0) && isActive && states == PlayerStates.idling)
-        {
-            canAttack = false;
-            states = PlayerStates.attacking;
+        if (!isActive) return;
 
-        }
-        else
+        if (Input.GetMouseButtonDown(0) && canAttack && isGrounded)
         {
-            states = PlayerStates.idling;
-        }
-
-        if (states == PlayerStates.attacking)
-        {
-            PlayerAttack();
+            if (attackRoutine != null) StopCoroutine(attackRoutine);
+            attackRoutine = StartCoroutine(DoAttack());
         }
 
         //taking damage
@@ -158,6 +152,19 @@ public class Player : MonoBehaviour
         }
 }
 
+    IEnumerator DoAttack()
+    {
+        canAttack = false;
+        Debug.Log("canAttack -> FALSE");
+
+        appearance.PlayAttack();
+        Debug.Log("attacked");
+
+        yield return new WaitForSeconds(1f);
+
+        canAttack = true;
+        Debug.Log("canAttack -> TRUE");
+    }
     void FixedUpdate() {
         float inputX = 0f;
         if (Input.GetKey(KeyCode.A) && left && isActive)
@@ -211,10 +218,9 @@ public class Player : MonoBehaviour
 
     IEnumerator AttackDuration()
     {
-        //Debug.Log("attack started");
         yield return new WaitForSeconds(1f);
-        //Debug.Log("attack finished");
         canAttack = true;
+        states = PlayerStates.idling;
     }
 
     void AddFeathers()
@@ -235,7 +241,6 @@ public class Player : MonoBehaviour
     void PlayerAttack()
     {
         Debug.Log("attacked");
-        StartCoroutine(AttackDuration());
         states = PlayerStates.idling;
     }
     
@@ -254,6 +259,12 @@ public class Player : MonoBehaviour
             src.Play();
             Destroy(go, landClip.length);
         }
+    }
+
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+    static void ResetStatics()
+    {
+        canAttack = true;
     }
 
 }
