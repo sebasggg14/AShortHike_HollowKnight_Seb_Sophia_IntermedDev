@@ -29,6 +29,8 @@ public class NextRoom : MonoBehaviour
     {
         if (canTransition == true)
         {
+            canTransition = false;
+            animator.ResetTrigger("FadeOut");
             animator.SetTrigger("FadeIn");
         }
     }

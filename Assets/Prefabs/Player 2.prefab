@@ -471,7 +471,6 @@ GameObject:
   - component: {fileID: 1053726820261563143}
   - component: {fileID: 830351508861606290}
   - component: {fileID: 3944528568656086070}
-  - component: {fileID: 3900031233216632230}
   - component: {fileID: 1447256943157266373}
   m_Layer: 0
   m_Name: Player 2
@@ -574,6 +573,7 @@ MonoBehaviour:
   landClip: {fileID: 8300000, guid: fb35693c95479434cb83e743f6f88663, type: 3}
   fallGravityMultiplier: 2.5
   lowJumpMultiplier: 2
+  appearance: {fileID: 0}
 --- !u!114 &3944528568656086070
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -587,21 +587,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 830351508861606290}
-  transitionObject: {fileID: 0}
-  nextScene: 
---- !u!114 &3900031233216632230
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3718555325435599919}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e2eab000281f14a4bbf0adb8ae42b95a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  player: {fileID: 0}
   transitionObject: {fileID: 0}
   nextScene: 
 --- !u!82 &1447256943157266373

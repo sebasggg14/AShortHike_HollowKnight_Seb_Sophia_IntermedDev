@@ -4,25 +4,38 @@ using UnityEngine.SceneManagement;
 public class TransitionCode : MonoBehaviour
 {
     [SerializeField]
-    NextRoom script; //?????
-
-    public string nextScene;
+    NextRoom script;
 
     [SerializeField]
     Player player;
 
     [SerializeField]
     Animator animator;
-    
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+
+    public void PlayFadeOut() 
     {
+        animator.ResetTrigger("FadeIn");
         animator.SetTrigger("FadeOut");
+    }
+
+    void OnEnable()
+    {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    void OnDisable()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        PlayFadeOut(); // fade out of black square and into scene
     }
 
     public void LoadSceneByName()
     {
-        SceneManager.LoadScene(nextScene);
+        SceneManager.LoadScene(script.nextScene);
         player.isActive = true;
     }
 }

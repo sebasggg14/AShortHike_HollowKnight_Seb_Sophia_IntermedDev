@@ -115,7 +115,7 @@ public class CameraMovement : MonoBehaviour
         }
 
         // make camera lerp to target
-        targetPos.z = -30f;
+        targetPos.z = -40f;
         transform.position = Vector3.SmoothDamp(transform.position, targetPos, ref velocity, smoothValue);
     }
 }
