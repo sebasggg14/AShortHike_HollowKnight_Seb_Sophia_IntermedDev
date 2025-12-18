@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour
 {
@@ -47,6 +48,16 @@ public class Player : MonoBehaviour
 
     PlayerStates states = PlayerStates.idling;
 
+    AudioSource aud;
+    public AudioClip dirt;
+    public AudioClip jumpClip;
+    public AudioClip landClip;
+
+
+    public float fallGravityMultiplier = 2.5f;   // faster fall
+    public float lowJumpMultiplier = 2.0f;  
+    [SerializeField] private PlayerAppearance appearance;
+    private Coroutine attackRoutine;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -54,25 +65,22 @@ public class Player : MonoBehaviour
         feathers = maxFeathers;
         rb = GetComponent<Rigidbody>();
         isActive = true;
+        aud = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
     void Update()
     {
 
-        if (Input.GetMouseButtonDown(0) && isActive)
-        {
-            canAttack = false;
-            states = PlayerStates.attacking;
-        }
-        else
-        {
-            states = PlayerStates.idling;
-        }
+        //death
+        if (health <= 0) SceneManager.LoadScene("gameover");
 
-        if (states == PlayerStates.attacking)
+        if (!isActive) return;
+
+        if (Input.GetMouseButtonDown(0) && canAttack && isGrounded)
         {
-            PlayerAttack();
+            if (attackRoutine != null) StopCoroutine(attackRoutine);
+            attackRoutine = StartCoroutine(DoAttack());
         }
 
         //taking damage
@@ -84,6 +92,7 @@ public class Player : MonoBehaviour
         //jump
         if (Input.GetKeyDown(KeyCode.Space) && isActive)
         {
+            aud.PlayOneShot(jumpClip);
             if (isGrounded)
             {
                 // FIRST JUMP (free)
@@ -110,8 +119,52 @@ public class Player : MonoBehaviour
         {
             AddFeathers();
         }
-    }
 
+        //audio
+        bool holdingLeft = Input.GetKey(KeyCode.A) && left && isActive;
+        bool holdingRight = Input.GetKey(KeyCode.D) && right && isActive;
+        bool holdingSpace = Input.GetKey(KeyCode.Space) && isActive;
+        bool holding = holdingRight || holdingLeft;
+
+        if (holding && isGrounded)
+        {
+                if (!aud.isPlaying)
+                {
+                    aud.clip = dirt;
+                    aud.loop = true;
+                    aud.Play();
+                }
+        }
+        else if (holdingSpace && !isGrounded && feathers > 0)
+        {
+            if (!aud.isPlaying)
+            {
+                aud.PlayOneShot(jumpClip);
+            }
+        }
+        else
+        {
+            // Stop when we let go of both directions or leave ground
+            if (aud.isPlaying)
+            {
+                aud.Stop();
+            }
+        }
+}
+
+    IEnumerator DoAttack()
+    {
+        canAttack = false;
+        Debug.Log("canAttack -> FALSE");
+
+        appearance.PlayAttack();
+        Debug.Log("attacked");
+
+        yield return new WaitForSeconds(1f);
+
+        canAttack = true;
+        Debug.Log("canAttack -> TRUE");
+    }
     void FixedUpdate() {
         float inputX = 0f;
         if (Input.GetKey(KeyCode.A) && left && isActive)
@@ -121,6 +174,7 @@ public class Player : MonoBehaviour
             lastInputHorizontal = -1;
             rb.MoveRotation(Quaternion.Euler(0, 323.934f, 0));
         }
+
         if (Input.GetKey(KeyCode.D) && right && isActive)
         {
             inputX = 1f;
@@ -131,6 +185,19 @@ public class Player : MonoBehaviour
         Vector3 velocity = rb.linearVelocity;
         velocity.x = inputX * speed;
         rb.linearVelocity = velocity;
+
+        float vy = rb.linearVelocity.y;
+
+        // If falling, apply extra gravity
+        if (vy < 0f)
+        {
+            rb.linearVelocity += Vector3.up * Physics.gravity.y * (fallGravityMultiplier - 1f) * Time.fixedDeltaTime;
+        }
+        // If rising but jump released early, apply extra gravity (short hop)
+        else if (vy > 0f && !Input.GetKey(KeyCode.Space))
+        {
+            rb.linearVelocity += Vector3.up * Physics.gravity.y * (lowJumpMultiplier - 1f) * Time.fixedDeltaTime;
+        }
 
         // for smooth transition between scenes 
         if (!isActive)
@@ -151,10 +218,9 @@ public class Player : MonoBehaviour
 
     IEnumerator AttackDuration()
     {
-        //Debug.Log("attack started");
         yield return new WaitForSeconds(1f);
-        //Debug.Log("attack finished");
         canAttack = true;
+        states = PlayerStates.idling;
     }
 
     void AddFeathers()
@@ -175,7 +241,6 @@ public class Player : MonoBehaviour
     void PlayerAttack()
     {
         Debug.Log("attacked");
-        StartCoroutine(AttackDuration());
         states = PlayerStates.idling;
     }
     
@@ -185,7 +250,21 @@ public class Player : MonoBehaviour
         {
             isGrounded = true; //ground check for double jump
             isFalling = false;
+            var go = new GameObject("SFX_Collect");
+            go.transform.position = Camera.main.transform.position; // play at listener so it's always loud
+            var src = go.AddComponent<AudioSource>();
+            src.clip = landClip;
+            src.spatialBlend = 0f;   // 2D
+            src.volume = 1f;
+            src.Play();
+            Destroy(go, landClip.length);
         }
+    }
+
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+    static void ResetStatics()
+    {
+        canAttack = true;
     }
 
 }

@@ -4,7 +4,9 @@ using UnityEngine.SceneManagement;
 public class TransitionCode : MonoBehaviour
 {
     [SerializeField]
-    NextRoom script;
+    NextRoom script; //?????
+
+    public string nextScene;
 
     [SerializeField]
     Player player;
@@ -20,7 +22,7 @@ public class TransitionCode : MonoBehaviour
 
     public void LoadSceneByName()
     {
-        SceneManager.LoadScene(script.nextScene);
+        SceneManager.LoadScene(nextScene);
         player.isActive = true;
     }
 }

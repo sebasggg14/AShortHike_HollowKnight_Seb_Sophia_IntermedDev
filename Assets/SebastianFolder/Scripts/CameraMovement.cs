@@ -107,11 +107,11 @@ public class CameraMovement : MonoBehaviour
         // check if its working
         if (currentRoom == null)
         {
-            Debug.Log("No camera room set");
+            //Debug.Log("No camera room set");
         }
         else
         {
-            Debug.Log("Clamping to room " + currentRoom.name);
+            //Debug.Log("Clamping to room " + currentRoom.name);
         }
 
         // make camera lerp to target

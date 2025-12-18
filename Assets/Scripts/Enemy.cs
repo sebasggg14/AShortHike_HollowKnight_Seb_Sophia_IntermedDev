@@ -17,11 +17,21 @@ public class Enemy : MonoBehaviour
 
     [SerializeField]
     Rigidbody rb;
+
+    public bool isAttacking = false;
+
+    bool dying = false;
+
+    bool canEnemyTakeDamage = true;
+    bool canPlayerTakeDamage = true;
+
+    AudioSource aud;
+    public AudioClip damage;
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
+        aud = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -35,69 +45,71 @@ public class Enemy : MonoBehaviour
         {
             switchDir = false;
         }
-        if (switchDir)
+        if (switchDir && !dying)
         {
             rb.MoveRotation(Quaternion.Euler(0, 297.14f, 0));
             walkRight();
         }
-        if (!switchDir)
+        if (!switchDir && !dying)
         {
             rb.MoveRotation(Quaternion.Euler(0, 66.269f, 0));
             walkLeft();
         }
+
         if (health <= 0)
         {
-            Destroy(gameObject);
+            maxTime = 0;
+            time = 0;
+            ObjectivesTracker.enemiesKilled++;
+            if (ObjectivesTracker.enemiesKilled == 3) Quest.showAudioForFirsttime = true;
+            dying = true;
+        } 
+    }
+
+    void OnTriggerEnter(Collider other)
+    {
+        // PLAYER → ENEMY (stick attack)
+        if (other.CompareTag("Stick") && !Player.canAttack && canEnemyTakeDamage)
+        {
+            TakeEnemyDamage();
+        }
+
+        // ENEMY → PLAYER (body contact)
+        if (other.CompareTag("Player") && canPlayerTakeDamage && health > 0)
+        {
+            TakePlayerDamage();
         }
     }
 
-    IEnumerator HealthDuration()
+    void TakeEnemyDamage()
     {
-        //Debug.Log("attack started");
-        yield return new WaitForSeconds(2f);
-        //Debug.Log("attack finished");
-        canTakeDamage = true;
+        health--;
+        canEnemyTakeDamage = false;
+        StartCoroutine(EnemyDamageCooldown());
     }
 
-
-    void OnTriggerEnter(Collider collider)
+    void TakePlayerDamage()
     {
-        if (collider.CompareTag("Stick") && Player.canAttack == false && !canTakeDamage)
-        {
-            health--; //enemy takes damage
-        }
-        //player takes damage
-        if (collider.CompareTag("Player") && canTakeDamage)
-        {
-            player.health --;
-            //destroy health icon
-            GameObject lastObject = healthPanel.totalHealth[healthPanel.totalHealth.Count - 1];
-            Destroy(lastObject);
-            healthPanel.totalHealth.RemoveAt(healthPanel.totalHealth.Count - 1);
-            canTakeDamage = false;
-            StartCoroutine(HealthDuration());
-        }
+        player.health--;
+        aud.PlayOneShot(damage);
+        GameObject lastObject = healthPanel.totalHealth[healthPanel.totalHealth.Count - 1];
+        Destroy(lastObject);
+        healthPanel.totalHealth.RemoveAt(healthPanel.totalHealth.Count - 1);
 
+        canPlayerTakeDamage = false;
+        StartCoroutine(PlayerDamageCooldown());
     }
 
-    void OnTriggerStay(Collider collider)
+    IEnumerator EnemyDamageCooldown()
     {
-        if (collider.CompareTag("Stick") && Player.canAttack == false && !canTakeDamage)
-        {
-            health--; //enemy takes damage
-        }
-        //player takes damage
-        if (collider.CompareTag("Player") && canTakeDamage)
-        {
-            player.health --;
-            //destroy health icon
-            GameObject lastObject = healthPanel.totalHealth[healthPanel.totalHealth.Count - 1];
-            Destroy(lastObject);
-            healthPanel.totalHealth.RemoveAt(healthPanel.totalHealth.Count - 1);
-            canTakeDamage = false;
-            StartCoroutine(HealthDuration());
-        }
+        yield return new WaitForSeconds(0.4f);
+        canEnemyTakeDamage = true;
+    }
 
+    IEnumerator PlayerDamageCooldown()
+    {
+        yield return new WaitForSeconds(1.0f);
+        canPlayerTakeDamage = true;
     }
 
     void walkLeft() {
